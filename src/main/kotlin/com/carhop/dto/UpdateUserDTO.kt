@@ -10,6 +10,4 @@ class UpdateUserDTO (
     val lastName: String,
     val email: String,
     val password: String,
-    @EncodeDefault val drivingScore: Int = 0,
-    @EncodeDefault val userType: String = UserType.USER.userType
 )

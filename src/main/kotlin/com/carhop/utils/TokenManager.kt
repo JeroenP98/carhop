@@ -21,7 +21,7 @@ class TokenManager {
             .withIssuer(jwtDomain)
             .withClaim("email", user.email)
             .withClaim("id", user.id)
-            .withClaim("userTpe", user.userType)
+            .withClaim("userType", user.userType)
             .withExpiresAt(Date(expirationDate))
             .sign(Algorithm.HMAC256(jwtSecret))
     }
