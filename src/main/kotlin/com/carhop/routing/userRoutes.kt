@@ -71,7 +71,7 @@ fun Route.userRoutes() {
                 val userId = token!!.payload.getClaim("id").toString()
 
                 //check if user id matches the id in the parameters. users can only change their own details
-                if (requestedId == userId){
+                if (requestedId == userId) {
                     val userDetails = userDAO.getUser(userId.toInt())
                     if (userDetails != null) {
                         call.respond(HttpStatusCode.OK, userDetails)
@@ -80,9 +80,8 @@ fun Route.userRoutes() {
                     call.respond(HttpStatusCode.Forbidden, ResponseStatus("Can only request to see your own account"))
                 }
             }
-        }
 
-        route("/users/profile/{id}"){
+
             put {
                 val requestedId = call.parameters["id"]
                 val newUserValues = call.receive<UpdateUserDTO>()
@@ -92,13 +91,16 @@ fun Route.userRoutes() {
                 val userId = token!!.payload.getClaim("id").toString()
 
                 //check if user id matches the id in the parameters. users can only change their own details
-                if (requestedId == userId){
+                if (requestedId == userId) {
                     val updatedUser = userDAO.updateUser(newUserValues)
                     if (updatedUser != null) {
                         call.respond(HttpStatusCode.OK, updatedUser)
                     }
                 } else {
-                    call.respond(HttpStatusCode.Forbidden, ResponseStatus("Not allowed to change another profile but your own"))
+                    call.respond(
+                        HttpStatusCode.Forbidden,
+                        ResponseStatus("Not allowed to change another profile but your own")
+                    )
                 }
             }
 
@@ -109,17 +111,19 @@ fun Route.userRoutes() {
                 val userId = token!!.payload.getClaim("id").toString()
 
                 //check if user id matches the id in the parameters. users can only change their own details
-                if (requestedId == userId){
+                if (requestedId == userId) {
                     userDAO.deleteUser(requestedId.toInt())
                     call.respond(HttpStatusCode.OK, ResponseStatus("Account deleted"))
                 } else {
-                    call.respond(HttpStatusCode.Forbidden, ResponseStatus("Not allowed to change another profile but your own"))
+                    call.respond(
+                        HttpStatusCode.Forbidden,
+                        ResponseStatus("Not allowed to change another profile but your own")
+                    )
                 }
             }
+
+
         }
-
-
-
     }
 
 }
