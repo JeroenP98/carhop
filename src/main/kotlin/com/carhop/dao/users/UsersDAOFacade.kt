@@ -7,7 +7,6 @@ import com.carhop.models.User
 import org.jetbrains.exposed.sql.ResultRow
 
 interface UsersDAOFacade  {
-    suspend fun resultRowToUser(row: ResultRow): User
     suspend fun registerUser(newUser: RegisterUserDto): User?
     suspend fun loginUser(loginRequest: LoginRequestDTO): User?
     suspend fun getUser(userId: Int): User?
