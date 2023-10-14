@@ -1,11 +1,15 @@
 package com.carhop.routing
 
 import com.carhop.dao.users.userDAO
+import com.carhop.dto.LoginRequestDTO
 import com.carhop.dto.RegisterUserDto
+import com.carhop.dto.UpdateUserDTO
 import com.carhop.models.ResponseStatus
 import com.carhop.utils.TokenManager
 import io.ktor.http.*
 import io.ktor.server.application.*
+import io.ktor.server.auth.*
+import io.ktor.server.auth.jwt.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -19,17 +23,107 @@ fun Route.userRoutes() {
     route("users/register") {
         post {
             val user = call.receive<RegisterUserDto>()
+
+            //regex for validating user email input
             val emailPattern = Regex("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")
             //val passwordRegex = Regex("") password regex disabled for testing purposes
+
             if (emailPattern.matches(user.email)) {
                 val newUser = userDAO.registerUser(user)
+
                 if (newUser != null) {
+                    //create token if user was created
                     val jwtToken = tokenManager.generateJWTToken(newUser)
                     call.respond(HttpStatusCode.OK, mapOf("Token" to jwtToken))
+                }
+                else {
+                    call.respond(HttpStatusCode.Forbidden, ResponseStatus("User already exists"))
                 }
             } else {
                 call.respond(HttpStatusCode.Forbidden, ResponseStatus("Invalid email"))
             }
         }
     }
+
+    route("users/login") {
+        post {
+            val loginRequest = call.receive<LoginRequestDTO>()
+            val isLoginRequestValid = userDAO.loginUser(loginRequest)
+
+            if (isLoginRequestValid != null) {
+                val jwtToken = tokenManager.generateJWTToken(isLoginRequestValid)
+                call.respond(HttpStatusCode.OK, mapOf("token" to jwtToken))
+            } else {
+                call.respond(HttpStatusCode.Forbidden, ResponseStatus("Invalid email or password"))
+            }
+        }
+    }
+
+    authenticate("user") {
+        route("users/profile/{id}") {
+            get {
+                //retrieve path parameter
+                val requestedId = call.parameters["id"]
+
+                //retrieve JWT token from HTTP header
+                val token = call.principal<JWTPrincipal>()
+                //retrieve the user id value stored in JWT token
+                val userId = token!!.payload.getClaim("id").toString()
+
+                //check if user id matches the id in the parameters. users can only change their own details
+                if (requestedId == userId) {
+                    val userDetails = userDAO.getUser(userId.toInt())
+                    if (userDetails != null) {
+                        call.respond(HttpStatusCode.OK, userDetails)
+                    }
+                } else {
+                    call.respond(HttpStatusCode.Forbidden, ResponseStatus("Can only request to see your own account"))
+                }
+            }
+
+
+            put {
+                val requestedId = call.parameters["id"]
+                val newUserValues = call.receive<UpdateUserDTO>()
+                //retrieve JWT token from HTTP header
+                val token = call.principal<JWTPrincipal>()
+                //retrieve the user id value stored in JWT token
+                val userId = token!!.payload.getClaim("id").toString()
+
+                //check if user id matches the id in the parameters. users can only change their own details
+                if (requestedId == userId) {
+                    val updatedUser = userDAO.updateUser(newUserValues)
+                    if (updatedUser != null) {
+                        call.respond(HttpStatusCode.OK, updatedUser)
+                    }
+                } else {
+                    call.respond(
+                        HttpStatusCode.Forbidden,
+                        ResponseStatus("Not allowed to change another profile but your own")
+                    )
+                }
+            }
+
+            delete {
+                val requestedId = call.parameters["id"]
+                val token = call.principal<JWTPrincipal>()
+                //retrieve the user id value stored in JWT token
+                val userId = token!!.payload.getClaim("id").toString()
+
+                //check if user id matches the id in the parameters. users can only change their own details
+                if (requestedId == userId) {
+                    userDAO.deleteUser(requestedId.toInt())
+                    call.respond(HttpStatusCode.OK, ResponseStatus("Account deleted"))
+                } else {
+                    call.respond(
+                        HttpStatusCode.Forbidden,
+                        ResponseStatus("Not allowed to change another profile but your own")
+                    )
+                }
+            }
+
+
+        }
+    }
+
 }
