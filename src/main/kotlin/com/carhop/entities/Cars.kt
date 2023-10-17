@@ -6,7 +6,7 @@ import org.jetbrains.exposed.sql.Table
 
 object Cars: Table() {
     val id: Column<Int> = integer("id").autoIncrement().uniqueIndex()
-    val owner: Column<Int> = integer("owner")
+    val ownerId: Column<Int> = integer("owner")
     val licensePlate: Column<String> = varchar("license_plate", 255)
     val rentalPrice: Column<Double> = double("rental_price")
     val available: Column<Boolean> = bool("available")

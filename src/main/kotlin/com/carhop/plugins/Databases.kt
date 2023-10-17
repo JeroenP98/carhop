@@ -17,6 +17,7 @@ object DatabaseFactory {
 
         transaction(database) {
             SchemaUtils.create(Users)
+            SchemaUtils.create(Cars)
         }
     }
     suspend fun <T> dbQuery(block: suspend () -> T): T =
