@@ -19,5 +19,8 @@ data class Car (
     val purchasePrice: Double,
     val monthlyInsuranceCost: Double,
     val yearlyMaintenanceCost: Double,
+    val range: Double?,
+    val fuelType: String?,
+    val transmission: String?
 
 )

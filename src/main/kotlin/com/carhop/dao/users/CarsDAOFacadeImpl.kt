@@ -8,11 +8,9 @@ import com.carhop.models.Car
 import com.carhop.plugins.DatabaseFactory
 import com.carhop.plugins.DatabaseFactory.dbQuery
 import kotlinx.coroutines.runBlocking
-import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.update
+import org.jetbrains.exposed.sql.transactions.transaction
 
 class CarsDAOFacadeImpl : CarsDAOFacade {
 
@@ -29,8 +27,14 @@ class CarsDAOFacadeImpl : CarsDAOFacade {
         emissionCategory = row[Cars.emissionCategory],
         purchasePrice = row[Cars.purchasePrice],
         monthlyInsuranceCost = row[Cars.monthlyInsuranceCost],
-        yearlyMaintenanceCost = row[Cars.yearlyMaintenanceCost]
+        yearlyMaintenanceCost = row[Cars.yearlyMaintenanceCost],
+        range = row[Cars.range],
+        fuelType = row[Cars.fuelType],
+        transmission = row[Cars.transmission],
+
     )
+
+
 
     override suspend fun registerCar(newCar: RegisterCarDTO): Car? = DatabaseFactory.dbQuery {
         val isCaridUnique = Cars.select(Cars.licensePlate eq newCar.licensePlate).empty()
@@ -49,6 +53,9 @@ class CarsDAOFacadeImpl : CarsDAOFacade {
                 it[purchasePrice] = newCar.purchasePrice
                 it[monthlyInsuranceCost] = newCar.monthlyInsuranceCost
                 it[yearlyMaintenanceCost] = newCar.yearlyMaintenanceCost
+                it[range] = newCar.range
+                it[fuelType] = newCar.fuelType
+                it[transmission] = newCar.transmission
             }
             insertStatement.resultedValues?.singleOrNull()?.let(::resultRowToCar)
         } else {
@@ -57,13 +64,13 @@ class CarsDAOFacadeImpl : CarsDAOFacade {
     }
 
     override suspend fun updateCar (updatedCar: UpdateCarDTO): Car?  = dbQuery {
-        val carToUpdate = Cars.select(Cars.id eq updatedCar.carId).map {resultRowToCar(it)}.singleOrNull()
+        val carToUpdate = Cars.select(Cars.licensePlate eq updatedCar.licensePlate).map {resultRowToCar(it)}.singleOrNull()
 
         if (carToUpdate != null){
 
-            val CarIdToUpdate = updatedCar.carId
+            val CarIdToUpdate = updatedCar.licensePlate
 
-            val CarUpdateStatement = Cars.update({ Cars.id eq updatedCar.carId }) {
+            val CarUpdateStatement = Cars.update({ Cars.licensePlate eq updatedCar.licensePlate }) {
                 it[Cars.licensePlate] = updatedCar.licensePlate
                 it[Cars.rentalPrice] = updatedCar.rentalPrice
                 it[Cars.available] = updatedCar.available
@@ -75,11 +82,14 @@ class CarsDAOFacadeImpl : CarsDAOFacade {
                 it[Cars.purchasePrice] = updatedCar.purchasePrice
                 it[Cars.monthlyInsuranceCost] = updatedCar.monthlyInsuranceCost
                 it[Cars.yearlyMaintenanceCost] = updatedCar.yearlyMaintenanceCost
+                it[range] = updatedCar.range
+                it[fuelType] = updatedCar.fuelType
+                it[transmission] = updatedCar.transmission
             }
             if (CarUpdateStatement < 1){
                 null
             }else{
-                Cars.select { Cars.id eq CarIdToUpdate }.map { resultRowToCar(it) }.singleOrNull()
+                Cars.select { Cars.licensePlate eq CarIdToUpdate }.map { resultRowToCar(it) }.singleOrNull()
             }
 
         }else {
@@ -88,8 +98,37 @@ class CarsDAOFacadeImpl : CarsDAOFacade {
 
     }
 
+    override suspend fun searchCars(): List<Car> = dbQuery {
+        Cars.selectAll().map(::resultRowToCar)
+    }
 
 
+
+    override suspend fun getCar(carId: Int): Car? {
+        val car = transaction {
+            Cars.select { Cars.id eq carId }.map { resultRowToCar(it) }.singleOrNull()
+        }
+
+        return car
+    }
+
+    override suspend fun deleteCar(carId: Int) {
+        transaction {
+            Cars.deleteWhere { id eq carId }
+        }
+    }
+
+    override suspend fun getOwnerIdByCarId(requestedId: Int): Int? {
+        var ownerId: Int? = null
+
+        transaction {
+            ownerId = Cars.select { Cars.id eq requestedId }
+                .singleOrNull()
+                ?.get(Cars.ownerId)
+        }
+
+        return ownerId
+    }
 
 
 }

@@ -1,6 +1,8 @@
 package com.carhop.dto
 
 import kotlinx.serialization.Serializable
+import org.jetbrains.exposed.sql.Column
+
 @Serializable
 data class RegisterCarDTO (
     val UserId: Int,
@@ -15,4 +17,7 @@ data class RegisterCarDTO (
     val purchasePrice: Double,
     val monthlyInsuranceCost: Double,
     val yearlyMaintenanceCost: Double,
+    val range: Double?,
+    val fuelType: String?,
+    val transmission: String?
 )

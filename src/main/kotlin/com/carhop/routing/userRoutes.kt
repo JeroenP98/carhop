@@ -92,6 +92,8 @@ fun Route.userRoutes() {
                     val updatedUser = userDAO.updateUser(newUserValues)
                     if (updatedUser != null) {
                         call.respond(HttpStatusCode.OK, updatedUser)
+                    } else {
+                        call.respond(HttpStatusCode.BadRequest, ResponseStatus("Unable to update user"))
                     }
                 } else {
                     call.respond(

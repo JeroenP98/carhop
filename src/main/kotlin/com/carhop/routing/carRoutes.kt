@@ -2,30 +2,135 @@ package com.carhop.routing
 
 import com.carhop.dao.users.carDAO
 import com.carhop.dto.RegisterCarDTO
+import com.carhop.dto.UpdateCarDTO
+import com.carhop.entities.Cars
 import com.carhop.models.ResponseStatus
+import com.carhop.plugins.DatabaseFactory.dbQuery
+import com.carhop.utils.TokenManager
 import io.ktor.http.*
 import io.ktor.server.application.*
+import io.ktor.server.auth.*
+import io.ktor.server.auth.jwt.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.transactions.transaction
 
 fun Route.carRoutes() {
     //create instance of the token manager to handle out tokens
 
+    //create instance of the token manager to handle out tokens
+    val tokenManager = TokenManager()
 
-    route("cars/register") {
-        post {
-            val car = call.receive<RegisterCarDTO>()
+    authenticate("user") {
+        route("cars/register") {
+            post {
+                val car = call.receive<RegisterCarDTO>()
 
+                //retrieve JWT token from HTTP header
+                val token = call.principal<JWTPrincipal>()
+                //retrieve the user id value stored in JWT token
+                val userId = token!!.payload.getClaim("id").toString()
 
-            if (true) {
-                val newCar = carDAO.registerCar(car)
-                if (newCar != null) {
-                    call.respond(HttpStatusCode.OK)
+                if (userId.toInt() == car.UserId) {
+                    val newCar = carDAO.registerCar(car)
+
+                    if (newCar != null) {
+                        call.respond(HttpStatusCode.OK, mapOf("car" to newCar))
+                    } else  {
+                        call.respond(HttpStatusCode.Forbidden, ResponseStatus("Unable to register car"))
+                    }
+
+                } else {
+                    call.respond(HttpStatusCode.Forbidden, ResponseStatus("Cannot register a car for a different user"))
                 }
-            } else {
-                call.respond(HttpStatusCode.Forbidden, ResponseStatus("Invalid Registration"))
+            }
+        }
+
+        route("cars/search") {
+            get {
+                val carList = carDAO.searchCars()
+
+                call.respond(HttpStatusCode.OK, carList)
+            }
+        }
+
+        route("cars/{id}") {
+            get {
+                val requestedCar = call.parameters["id"]?.toIntOrNull()
+
+                if (requestedCar != null) {
+                    val car = carDAO.getCar(requestedCar)
+                    if (car != null) {
+                        call.respond(HttpStatusCode.OK, car)
+                    } else {
+                        call.respond(HttpStatusCode.BadRequest, ResponseStatus("Unable to find car"))
+                    }
+                } else {
+                    call.respond(HttpStatusCode.BadRequest, ResponseStatus("Invalid parameters"))
+                }
+            }
+
+            put {
+                val newCarValues = call.receive<UpdateCarDTO>()
+
+                val requestedId = call.parameters["id"]
+                //retrieve JWT token from HTTP header
+
+                if (requestedId != null) {
+                    val carBelongsTo = carDAO.getOwnerIdByCarId(requestedId.toInt())
+
+                    val token = call.principal<JWTPrincipal>()
+                    //retrieve the user id value stored in JWT token
+                    val userId = token!!.payload.getClaim("id").toString()
+
+                    if (userId.toInt() == carBelongsTo) {
+                        val updatedCar = carDAO.updateCar(newCarValues)
+
+                        if (updatedCar != null) {
+                            call.respond(HttpStatusCode.OK, updatedCar)
+                        } else {
+                            call.respond(HttpStatusCode.BadRequest, ResponseStatus("Unable to update car"))
+                        }
+
+                    } else {
+                        call.respond(HttpStatusCode.Forbidden, ResponseStatus("Not allowed to change any other car but your own"))
+                    }
+                } else {
+                    call.respond(HttpStatusCode.BadRequest, ResponseStatus("Invalid parameters"))
+                }
+
+
+
+
+            }
+
+            delete {
+                val requestedId = call.parameters["id"]
+                //retrieve JWT token from HTTP header
+                val token = call.principal<JWTPrincipal>()
+                //retrieve the user id value stored in JWT token
+                val userId = token!!.payload.getClaim("id").toString()
+
+                if (requestedId != null) {
+                    val carBelongsTo = carDAO.getOwnerIdByCarId(requestedId.toInt())
+
+                    if (carBelongsTo == userId.toInt()) {
+
+                        // TODO: implement logic to deny users from deleting cars when there are still active rentals
+                        carDAO.deleteCar(requestedId.toInt())
+                        call.respond(HttpStatusCode.OK, ResponseStatus("Car deleted"))
+                    } else {
+                        call.respond(HttpStatusCode.Forbidden, ResponseStatus("Not allowed to delete any other car but your own"))
+                    }
+                } else {
+                    call.respond(HttpStatusCode.BadRequest, ResponseStatus("Invalid parameters"))
+                }
+
+
             }
         }
     }
+
 }
