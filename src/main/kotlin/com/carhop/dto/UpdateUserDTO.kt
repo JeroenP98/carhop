@@ -1,7 +1,5 @@
 package com.carhop.dto
 
-import com.carhop.models.UserType
-import kotlinx.serialization.EncodeDefault
 import kotlinx.serialization.Serializable
 
 @Serializable

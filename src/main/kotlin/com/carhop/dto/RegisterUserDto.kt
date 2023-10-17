@@ -1,9 +1,9 @@
 package com.carhop.dto
 
 import com.carhop.models.UserType
-import kotlinx.serialization.EncodeDefault
 import kotlinx.serialization.Serializable
 
+//used for receiving user registration requests
 @Serializable
 data class RegisterUserDto (
     val firstName: String,

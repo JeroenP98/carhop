@@ -1,9 +1,7 @@
 package com.carhop.routing
 
 import com.carhop.dao.users.userDAO
-import com.carhop.dto.LoginRequestDTO
-import com.carhop.dto.RegisterUserDto
-import com.carhop.dto.UpdateUserDTO
+import com.carhop.dto.*
 import com.carhop.models.ResponseStatus
 import com.carhop.utils.TokenManager
 import io.ktor.http.*
@@ -13,7 +11,6 @@ import io.ktor.server.auth.jwt.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import org.jetbrains.exposed.sql.Database
 
 fun Route.userRoutes() {
 

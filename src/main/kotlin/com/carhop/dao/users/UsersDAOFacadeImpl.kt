@@ -30,11 +30,11 @@ class UsersDAOFacadeImpl : UsersDAOFacade {
 
         if (isEmailUnique) {
             val insertStatement = Users.insert {
-                it[Users.firstName] = newUser.firstName
-                it[Users.lastName] = newUser.lastName
-                it[Users.email] = newUser.email
-                it[Users.password] = newUser.password
-                it[Users.userType] = newUser.userType
+                it[firstName] = newUser.firstName
+                it[lastName] = newUser.lastName
+                it[email] = newUser.email
+                it[password] = newUser.password
+                it[userType] = newUser.userType
             }
 
             //return resulted record created as user object
@@ -77,10 +77,10 @@ class UsersDAOFacadeImpl : UsersDAOFacade {
 
             //execute update statement
             val updateStatement = Users.update({Users.email eq updatedUser.email}) {
-                it[Users.firstName] = updatedUser.firstName
-                it[Users.lastName] = updatedUser.lastName
-                it[Users.email] = updatedUser.email
-                it[Users.password] = updatedUser.password
+                it[firstName] = updatedUser.firstName
+                it[lastName] = updatedUser.lastName
+                it[email] = updatedUser.email
+                it[password] = updatedUser.password
 
             }
 
@@ -99,7 +99,7 @@ class UsersDAOFacadeImpl : UsersDAOFacade {
 
     override suspend fun deleteUser(userId: Int) {
         transaction {
-            Users.deleteWhere { Users.id eq userId }
+            Users.deleteWhere { id eq userId }
         }
     }
 }

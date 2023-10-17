@@ -4,7 +4,6 @@ import com.carhop.dto.LoginRequestDTO
 import com.carhop.dto.RegisterUserDto
 import com.carhop.dto.UpdateUserDTO
 import com.carhop.models.User
-import org.jetbrains.exposed.sql.ResultRow
 
 interface UsersDAOFacade  {
     suspend fun registerUser(newUser: RegisterUserDto): User?

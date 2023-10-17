@@ -7,17 +7,16 @@ import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
 import io.ktor.server.response.*
-import java.util.*
 
+//configure variables used to sign the JWT token
 val jwtAudience = "jwt-audience"
 val jwtDomain = "127.0.0.1:8080"
 val jwtRealm = "CarHop app"
 val jwtSecret = "secret"
 
 fun Application.configureSecurity() {
-    // Please read the jwt property from the config file if you are using EngineMain
-
     authentication {
+        //authentication to be used for pages only accessible by users
         jwt("user") {
             realm = jwtRealm
             verifier(
@@ -40,6 +39,7 @@ fun Application.configureSecurity() {
                 call.respond(HttpStatusCode.Unauthorized)
             }
         }
+        //authentication to be used for pages only accessible by admins
         jwt("admin") {
             realm = jwtRealm
             verifier(
