@@ -1,12 +1,9 @@
 package com.carhop.routing
 
-import com.carhop.dao.users.carDAO
-import com.carhop.dto.RegisterCarDTO
-import com.carhop.dto.UpdateCarDTO
-import com.carhop.entities.Cars
+import com.carhop.dao.cars.carDAO
+import com.carhop.dto.cars.RegisterCarDTO
+import com.carhop.dto.cars.UpdateCarDTO
 import com.carhop.models.ResponseStatus
-import com.carhop.plugins.DatabaseFactory.dbQuery
-import com.carhop.utils.TokenManager
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -14,15 +11,8 @@ import io.ktor.server.auth.jwt.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.transactions.transaction
 
 fun Route.carRoutes() {
-    //create instance of the token manager to handle out tokens
-
-    //create instance of the token manager to handle out tokens
-    val tokenManager = TokenManager()
-
     authenticate("user") {
         route("cars/register") {
             post {
@@ -50,7 +40,7 @@ fun Route.carRoutes() {
 
         route("cars/search") {
             get {
-                val carList = carDAO.searchCars()
+                val carList = carDAO.getAllCars()
 
                 call.respond(HttpStatusCode.OK, carList)
             }

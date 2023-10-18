@@ -51,9 +51,11 @@ fun Application.configureSecurity() {
             )
             validate { credential ->
                 if (credential.payload.audience.contains(jwtAudience)
-                    && credential.payload.getClaim("userType").toString().lowercase() == "admin") {
+                    && credential.payload.getClaim("userType").asString().lowercase() == "admin") {
                     JWTPrincipal(credential.payload)
-                } else null
+                } else {
+                    null
+                }
             }
 
             challenge { defaultScheme, realm ->

@@ -3,6 +3,8 @@ package com.carhop.entities
 
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.transactions.transaction
 
 object Cars: Table() {
     val id: Column<Int> = integer("id").autoIncrement().uniqueIndex()
@@ -24,4 +26,12 @@ object Cars: Table() {
 
 
     override val primaryKey = PrimaryKey(id)
+}
+
+
+fun checkCarExists(carId: Int): Boolean {
+    return transaction {
+        val existingCar = Cars.select { Cars.id eq carId }.singleOrNull()
+        existingCar != null
+    }
 }

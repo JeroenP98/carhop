@@ -2,6 +2,8 @@ package com.carhop.entities
 
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.transactions.transaction
 
 object Users: Table() {
     val id: Column<Int> = integer("id").autoIncrement().uniqueIndex()
@@ -13,4 +15,11 @@ object Users: Table() {
     val userType: Column<String> = varchar("user_type", 255).default("user")
 
     override val primaryKey = PrimaryKey(id)
+}
+
+fun checkUserExists(userId: Int): Boolean {
+    return transaction {
+        val existingUser = Users.select { Users.id eq userId }.singleOrNull()
+        existingUser != null
+    }
 }

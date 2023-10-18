@@ -1,11 +1,10 @@
-package com.carhop.dao.users
+package com.carhop.dao.cars
 
-import com.carhop.dto.RegisterCarDTO
-import com.carhop.dto.UpdateCarDTO
+import com.carhop.dto.cars.RegisterCarDTO
+import com.carhop.dto.cars.UpdateCarDTO
 import com.carhop.entities.Cars
 import com.carhop.entities.Users
 import com.carhop.models.Car
-import com.carhop.plugins.DatabaseFactory
 import com.carhop.plugins.DatabaseFactory.dbQuery
 import kotlinx.coroutines.runBlocking
 import org.jetbrains.exposed.sql.*
@@ -14,32 +13,35 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 class CarsDAOFacadeImpl : CarsDAOFacade {
 
-    private fun resultRowToCar(row: ResultRow) = Car (
-        id = row[Cars.id],
-        ownerId = row[Cars.ownerId],
-        licensePlate = row[Cars.licensePlate],
-        rentalPrice = row[Cars.rentalPrice],
-        available = row[Cars.available],
-        brandName = row[Cars.brandName],
-        modelName = row[Cars.modelName],
-        buildYear = row[Cars.buildYear],
-        numOfSeats = row[Cars.numOfSeats],
-        emissionCategory = row[Cars.emissionCategory],
-        purchasePrice = row[Cars.purchasePrice],
-        monthlyInsuranceCost = row[Cars.monthlyInsuranceCost],
-        yearlyMaintenanceCost = row[Cars.yearlyMaintenanceCost],
-        range = row[Cars.range],
-        fuelType = row[Cars.fuelType],
-        transmission = row[Cars.transmission],
+    companion object {
+        fun resultRowToCar(row: ResultRow) = Car (
+            id = row[Cars.id],
+            ownerId = row[Cars.ownerId],
+            licensePlate = row[Cars.licensePlate],
+            rentalPrice = row[Cars.rentalPrice],
+            available = row[Cars.available],
+            brandName = row[Cars.brandName],
+            modelName = row[Cars.modelName],
+            buildYear = row[Cars.buildYear],
+            numOfSeats = row[Cars.numOfSeats],
+            emissionCategory = row[Cars.emissionCategory],
+            purchasePrice = row[Cars.purchasePrice],
+            monthlyInsuranceCost = row[Cars.monthlyInsuranceCost],
+            yearlyMaintenanceCost = row[Cars.yearlyMaintenanceCost],
+            range = row[Cars.range],
+            fuelType = row[Cars.fuelType],
+            transmission = row[Cars.transmission],
 
-    )
+            )
+    }
 
 
 
-    override suspend fun registerCar(newCar: RegisterCarDTO): Car? = DatabaseFactory.dbQuery {
-        val isCaridUnique = Cars.select(Cars.licensePlate eq newCar.licensePlate).empty()
+
+    override suspend fun registerCar(newCar: RegisterCarDTO): Car? = dbQuery {
+        val isCarIdUnique = Cars.select(Cars.licensePlate eq newCar.licensePlate).empty()
         val userConsists = !Users.select(Users.id eq newCar.UserId ).empty()
-        if (isCaridUnique && userConsists ) {
+        if (isCarIdUnique && userConsists ) {
             val insertStatement = Cars.insert {
                 it[ownerId] = newCar.UserId
                 it[licensePlate] = newCar.licensePlate
@@ -68,28 +70,28 @@ class CarsDAOFacadeImpl : CarsDAOFacade {
 
         if (carToUpdate != null){
 
-            val CarIdToUpdate = updatedCar.licensePlate
+            val carIdToUpdate = updatedCar.licensePlate
 
-            val CarUpdateStatement = Cars.update({ Cars.licensePlate eq updatedCar.licensePlate }) {
-                it[Cars.licensePlate] = updatedCar.licensePlate
-                it[Cars.rentalPrice] = updatedCar.rentalPrice
-                it[Cars.available] = updatedCar.available
-                it[Cars.brandName] = updatedCar.brandName
-                it[Cars.modelName] = updatedCar.modelName
-                it[Cars.buildYear] = updatedCar.buildYear
-                it[Cars.numOfSeats] = updatedCar.numOfSeats
-                it[Cars.emissionCategory] = updatedCar.emissionCategory
-                it[Cars.purchasePrice] = updatedCar.purchasePrice
-                it[Cars.monthlyInsuranceCost] = updatedCar.monthlyInsuranceCost
-                it[Cars.yearlyMaintenanceCost] = updatedCar.yearlyMaintenanceCost
+            val carUpdateStatement = Cars.update({ Cars.licensePlate eq updatedCar.licensePlate }) {
+                it[licensePlate] = updatedCar.licensePlate
+                it[rentalPrice] = updatedCar.rentalPrice
+                it[available] = updatedCar.available
+                it[brandName] = updatedCar.brandName
+                it[modelName] = updatedCar.modelName
+                it[buildYear] = updatedCar.buildYear
+                it[numOfSeats] = updatedCar.numOfSeats
+                it[emissionCategory] = updatedCar.emissionCategory
+                it[purchasePrice] = updatedCar.purchasePrice
+                it[monthlyInsuranceCost] = updatedCar.monthlyInsuranceCost
+                it[yearlyMaintenanceCost] = updatedCar.yearlyMaintenanceCost
                 it[range] = updatedCar.range
                 it[fuelType] = updatedCar.fuelType
                 it[transmission] = updatedCar.transmission
             }
-            if (CarUpdateStatement < 1){
+            if (carUpdateStatement < 1){
                 null
             }else{
-                Cars.select { Cars.licensePlate eq CarIdToUpdate }.map { resultRowToCar(it) }.singleOrNull()
+                Cars.select { Cars.licensePlate eq carIdToUpdate }.map { resultRowToCar(it) }.singleOrNull()
             }
 
         }else {
@@ -98,7 +100,7 @@ class CarsDAOFacadeImpl : CarsDAOFacade {
 
     }
 
-    override suspend fun searchCars(): List<Car> = dbQuery {
+    override suspend fun getAllCars(): List<Car> = dbQuery {
         Cars.selectAll().map(::resultRowToCar)
     }
 

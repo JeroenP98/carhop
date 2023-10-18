@@ -1,8 +1,8 @@
 package com.carhop.dao.users
 
-import com.carhop.dto.LoginRequestDTO
-import com.carhop.dto.RegisterUserDto
-import com.carhop.dto.UpdateUserDTO
+import com.carhop.dto.users.LoginRequestDTO
+import com.carhop.dto.users.RegisterUserDto
+import com.carhop.dto.users.UpdateUserDTO
 import com.carhop.entities.Users
 import com.carhop.models.User
 import com.carhop.plugins.DatabaseFactory.dbQuery
@@ -13,16 +13,19 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class UsersDAOFacadeImpl : UsersDAOFacade {
-    private fun resultRowToUser(row: ResultRow) = User (
-        // function for mapping the record returned by sql expression to user class
-        id = row[Users.id],
-        firstName = row[Users.firstName],
-        lastName = row[Users.lastName],
-        email = row[Users.email],
-        password = row[Users.password],
-        drivingScore = row[Users.drivingScore],
-        userType = row[Users.userType]
-    )
+    companion object {
+        fun resultRowToUser(row: ResultRow) = User (
+            // function for mapping the record returned by sql expression to user class
+            id = row[Users.id],
+            firstName = row[Users.firstName],
+            lastName = row[Users.lastName],
+            email = row[Users.email],
+            password = row[Users.password],
+            drivingScore = row[Users.drivingScore],
+            userType = row[Users.userType]
+        )
+    }
+
 
     override suspend fun registerUser(newUser: RegisterUserDto): User? = dbQuery {
         // verify if user email is unique
@@ -63,6 +66,10 @@ class UsersDAOFacadeImpl : UsersDAOFacade {
         }
 
         return user
+    }
+
+    override suspend fun getAllUsers(): List<User?> = dbQuery {
+        Users.selectAll().map(::resultRowToUser)
     }
 
     override suspend fun updateUser(updatedUser: UpdateUserDTO): User?  = dbQuery{

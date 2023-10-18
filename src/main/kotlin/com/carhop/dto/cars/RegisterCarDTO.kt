@@ -1,4 +1,4 @@
-package com.carhop.dto
+package com.carhop.dto.cars
 
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.Column
