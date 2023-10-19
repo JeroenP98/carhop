@@ -124,3 +124,4 @@ val rentalDao: RentalsDAOFacade = RentalsDAOFacadeImpl().apply {
 
     }
 }
+
