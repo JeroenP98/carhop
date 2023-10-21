@@ -155,7 +155,7 @@ class CarsDAOFacadeImpl : CarsDAOFacade {
             val depreciation: Double
             val fuelCost: Double
             val otherCosts: Double
-            var totalCostOfOwnership: Double
+            val totalCostOfOwnership: Double
 
 
             when (fuelType) {
@@ -175,7 +175,7 @@ class CarsDAOFacadeImpl : CarsDAOFacade {
                 }
                 "gasoline" -> {
                     // Define TCO calculations for gasoline cars
-                    depreciation = purchasePrice / 8.0 // Example: 12.5% depreciation per year
+                    depreciation = purchasePrice / 8.0 // 12.5% depreciation per year
                     fuelCost = 3000.0 // 3,000 fuel cost per year
                     otherCosts = yearlyMaintenance + (monthlyInsurance * 12.0) + depreciation
                     totalCostOfOwnership = purchasePrice + otherCosts + fuelCost
