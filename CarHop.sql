@@ -77,3 +77,24 @@ insert into cars (owner_id, license_plate, rental_price, available, brand_name, 
 insert into cars (owner_id, license_plate, rental_price, available, brand_name, model_name, build_year, num_of_seats, emission_category, purchase_price, monthly_insurance_cost, yearly_maintenance_cost, range, fuel_type, transmission) values (11, 'LM-45-GO', 53.41, false, 'GMC', 'Yukon', 1994, 3, 'l', 43922.04, 194.12, 424.46, 138, 'GASOLINE', 'Manual');
 insert into cars (owner_id, license_plate, rental_price, available, brand_name, model_name, build_year, num_of_seats, emission_category, purchase_price, monthly_insurance_cost, yearly_maintenance_cost, range, fuel_type, transmission) values (7, 'MQ-64-TT', 78.58, false, 'Honda', 'Element', 2011, 2, 'h', 54080.76, 480.19, 427.62, 294, 'GASOLINE', 'Automatic');
 
+
+INSERT INTO Rentals (car_id, renter_id, start_date, end_date, cost) VALUES (1, 2, '2023-10-15', '2023-10-20', 250.00);
+INSERT INTO Rentals (car_id, renter_id, start_date, end_date, cost) VALUES (3, 4, '2023-10-16', '2023-10-19', 180.50);
+INSERT INTO Rentals (car_id, renter_id, start_date, end_date, cost) VALUES (5, 6, '2023-10-17', '2023-10-22', 320.75);
+INSERT INTO Rentals (car_id, renter_id, start_date, end_date, cost) VALUES (7, 8, '2023-10-18', '2023-10-23', 200.25);
+INSERT INTO Rentals (car_id, renter_id, start_date, end_date, cost) VALUES (9, 10, '2023-10-19', '2023-10-24', 280.00);
+INSERT INTO Rentals (car_id, renter_id, start_date, end_date, cost) VALUES (11, 12, '2023-10-20', '2023-10-25', 225.75);
+INSERT INTO Rentals (car_id, renter_id, start_date, end_date, cost) VALUES (13, 14, '2023-10-21', '2023-10-26', 175.50);
+INSERT INTO Rentals (car_id, renter_id, start_date, end_date, cost) VALUES (15, 1, '2023-10-22', '2023-10-27', 275.25);
+INSERT INTO Rentals (car_id, renter_id, start_date, end_date, cost) VALUES (2, 3, '2023-10-23', '2023-10-28', 300.00);
+INSERT INTO Rentals (car_id, renter_id, start_date, end_date, cost) VALUES (4, 5, '2023-10-24', '2023-10-29', 225.75);
+INSERT INTO Rentals (car_id, renter_id, start_date, end_date, cost) VALUES (6, 7, '2023-10-25', '2023-10-30', 190.50);
+INSERT INTO Rentals (car_id, renter_id, start_date, end_date, cost) VALUES (8, 9, '2023-10-26', '2023-10-31', 210.25);
+INSERT INTO Rentals (car_id, renter_id, start_date, end_date, cost) VALUES (10, 11, '2023-10-27', '2023-11-01', 280.00);
+INSERT INTO Rentals (car_id, renter_id, start_date, end_date, cost) VALUES (12, 13, '2023-10-28', '2023-11-02', 250.75);
+INSERT INTO Rentals (car_id, renter_id, start_date, end_date, cost) VALUES (14, 15, '2023-10-29', '2023-11-03', 160.50);
+INSERT INTO Rentals (car_id, renter_id, start_date, end_date, cost) VALUES (1, 4, '2023-10-30', '2023-11-04', 235.25);
+INSERT INTO Rentals (car_id, renter_id, start_date, end_date, cost) VALUES (3, 6, '2023-10-31', '2023-11-05', 310.00);
+INSERT INTO Rentals (car_id, renter_id, start_date, end_date, cost) VALUES (5, 8, '2023-11-01', '2023-11-06', 215.75);
+INSERT INTO Rentals (car_id, renter_id, start_date, end_date, cost) VALUES (7, 10, '2023-11-02', '2023-11-07', 280.50);
+INSERT INTO Rentals (car_id, renter_id, start_date, end_date, cost) VALUES (9, 12, '2023-11-03', '2023-11-08', 190.25);
