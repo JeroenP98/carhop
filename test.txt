@@ -1,0 +1,242 @@
+Gebruikers
+-	Nieuwe gebruiker aanmaken
+{
+    "firstName": "Pieter",
+    "lastName": "Post",
+    "email": "pieter@gmail.com",
+    "password": "12345",
+    "userType": "user"
+}
+
+-	Nieuwe gebruiker proberen aan te maken met hetzelfde emailadres
+
+{
+    "firstName": "Jan",
+    "lastName": "Bakker",
+    "email": "pieter@gmail.com",
+    "password": "12345",
+    "userType": "user"
+}
+
+-	Inloggen met verkeerde gegevens
+
+{
+    "email" : "pieter@gmail.com",
+    "password" : "1234"
+}
+
+-	Inloggen met de juiste gegevens
+
+{
+    "email" : "pieter@gmail.com",
+    "password" : "12345"
+}
+
+-	Andere gebruiker proberen op te halen
+
+http://localhost:8080/users/profile/1
+
+-	Jezelf als gebruiker proberen op te halen
+
+http://localhost:8080/users/profile/17
+
+-	Gebruiker updaten
+http://localhost:8080/users/profile/17
+
+{
+    "firstName": "Pieter",
+    "lastName": "Post",
+    "email": "pieter@gmail.com",
+    "password": "1234567"
+}
+
+
+-	Andere gebruiker proberen te verwijderen
+
+http://localhost:8080/users/profile/1
+
+-   Account verwijderen
+
+http://localhost:8080/users/profile/17
+
+
+
+Auto’s
+-	Nieuwe auto aanmaken
+(eerst inloggen als andere gebruiker)
+{
+    "email" : "jeroen@user.com",
+    "password" : "12345"
+}
+
+{
+"UserId": 2,
+"licensePlate": "27-ZP-NG",
+"rentalPrice": 109.98,
+"available": true,
+"brandName": "Volkswagen",
+"modelName": "Golf",
+"buildYear": 2008,
+"numOfSeats": 5,
+"emissionCategory": "B",
+"purchasePrice": 35000.00,
+"monthlyInsuranceCost": 54.59,
+"yearlyMaintenanceCost": 2500,
+"range": 700.00,
+"fuelType": "GASOLINE",
+"transmission": "Manual"
+}
+
+
+-	Nieuwe auto aanmaken met hetzelfde kenteken
+
+(zelfde request nogmaals versturen)
+
+-	Alle auto’s opvragen
+
+(token aanpassen)
+
+-	Één auto opvragen
+(token aanpassen)
+
+-	Een auto updaten die niet van jou is
+
+http://127.0.0.1:8080/cars/1
+{
+"licensePlate": "28-ZP-NG",
+"rentalPrice": 100.20,
+"available": false,
+"brandName": "Volkswagen",
+"modelName": "Golf",
+"buildYear": 2008,
+"numOfSeats": 5,
+"emissionCategory": "B",
+"purchasePrice": 30000.21,
+"monthlyInsuranceCost": 250.22,
+"yearlyMaintenanceCost": 3402,
+"range": 700.50,
+"fuelType": "GASOLINE",
+"transmission": "Automatic"
+}
+
+-	Een auto updaten
+
+http://127.0.0.1:8080/cars/26
+
+{
+"licensePlate": "27-ZP-NG",
+"rentalPrice": 109.98,
+"available": true,
+"brandName": "Volkswagen",
+"modelName": "Golf",
+"buildYear": 2008,
+"numOfSeats": 5,
+"emissionCategory": "C",
+"purchasePrice": 35000.00,
+"monthlyInsuranceCost": 54.59,
+"yearlyMaintenanceCost": 2500,
+"range": 700.00,
+"fuelType": "GASOLINE",
+"transmission": "Manual"
+}
+
+-	TCO opvragen
+
+http://127.0.0.1:8080/cars/26/tco
+
+-   fueltype aanpassen en TCO opnieuw opvragen
+
+{
+"licensePlate": "27-ZP-NG",
+"rentalPrice": 109.98,
+"available": true,
+"brandName": "Volkswagen",
+"modelName": "Golf",
+"buildYear": 2008,
+"numOfSeats": 5,
+"emissionCategory": "C",
+"purchasePrice": 35000.00,
+"monthlyInsuranceCost": 54.59,
+"yearlyMaintenanceCost": 2500,
+"range": 700.00,
+"fuelType": "ELECTRIC",
+"transmission": "Manual"
+}
+
+
+
+-	Auto verwijderen
+
+http://127.0.0.1:8080/cars/26
+
+Rentals
+-	Nieuwe rental aanmaken voor andere gebruiker
+
+{
+    "carId" : 1,
+    "renterId" : 3,
+    "startDate" : "2023-10-21",
+    "endDate" : "2023-10-22",
+    "cost" : 200.00
+}
+
+
+-	Nieuwe rental aanmaken voor auto die niet bestaat
+
+{
+    "carId" : 99,
+    "renterId" : 2,
+    "startDate" : "2023-10-21",
+    "endDate" : "2023-10-22",
+    "cost" : 200.00
+}
+
+-	Nieuwe rental aanmaken met een auto die niet beschikbaar is
+
+{
+    "carId" : 2,
+    "renterId" : 2,
+    "startDate" : "2023-10-21",
+    "endDate" : "2023-10-22",
+    "cost" : 200.00
+}
+
+-	Nieuwe rental aanmaken
+
+{
+    "carId": 1,
+    "renterId": 2,
+    "startDate": "2023-10-24",
+    "endDate": "2023-10-25",
+    "cost": 200.0
+}
+
+-	Nieuwe rental aanmaken met een overlappend tijdsslot
+
+{
+    "carId" : 1,
+    "renterId" : 2,
+    "startDate" : "2023-10-25",
+    "endDate" : "2023-10-26",
+    "cost" : 200.00
+}
+
+-	Rental opvragen van een andere gebruiker
+
+http://127.0.0.1:8080/cars/rental/2
+
+-	Eigen rental opvragen
+
+http://127.0.0.1:8080/cars/rental/21
+
+-	Rental verwijderen die al geweest is
+
+http://127.0.0.1:8080/cars/rental/1
+
+-	Rental van een ander verwijderen
+
+http://127.0.0.1:8080/cars/rental/2
+
+-	Rental verwijderen
+
+http://127.0.0.1:8080/cars/rental/21

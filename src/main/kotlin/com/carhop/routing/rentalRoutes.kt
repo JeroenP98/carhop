@@ -90,8 +90,9 @@ fun Route.rentalRoutes() {
                 if (requestedRental != null) {
                     // retrieve the owner and renter listed for the rental and check if either of them matches id of JWT token
                     val owner = rentalDao.returnOwner(requestedRental.toInt())
+                    println(owner)
                     val renter = rentalDao.returnRenter(requestedRental.toInt())
-
+                    println(renter)
                     if (owner != null && renter != null) {
                         if (userId == owner.id || userId == renter.id) {
                             val rental = rentalDao.getRental(requestedRental.toInt())

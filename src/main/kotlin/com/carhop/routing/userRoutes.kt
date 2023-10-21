@@ -36,7 +36,7 @@ fun Route.userRoutes() {
                     call.respond(HttpStatusCode.OK, mapOf("Token" to jwtToken))
                 }
                 else {
-                    call.respond(HttpStatusCode.Forbidden, ResponseStatus("User already exists"))
+                    call.respond(HttpStatusCode.Forbidden, ResponseStatus("User/Email already exists"))
                 }
             } else {
                 call.respond(HttpStatusCode.Forbidden, ResponseStatus("Invalid email"))
@@ -91,7 +91,7 @@ fun Route.userRoutes() {
 
                 //check if user id matches the id in the parameters. users can only change their own details
                 if (requestedId == userId) {
-                    val updatedUser = userDAO.updateUser(newUserValues)
+                    val updatedUser = userDAO.updateUser(newUserValues, requestedId.toInt())
                     if (updatedUser != null) {
                         call.respond(HttpStatusCode.OK, updatedUser)
                     } else {

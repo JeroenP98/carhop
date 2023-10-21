@@ -76,10 +76,10 @@ class UsersDAOFacadeImpl : UsersDAOFacade {
     }
 
     //update a user
-    override suspend fun updateUser(updatedUser: UpdateUserDTO): User?  = dbQuery{
+    override suspend fun updateUser(updatedUser: UpdateUserDTO, userId: Int): User?  = dbQuery{
 
         //retrieve the user to be updated
-        val userToUpdate = Users.select { Users.email eq updatedUser.email }.map { resultRowToUser(it) }.singleOrNull()
+        val userToUpdate = Users.select { Users.id eq userId }.map { resultRowToUser(it) }.singleOrNull()
 
 
         if (userToUpdate != null) {
@@ -87,7 +87,7 @@ class UsersDAOFacadeImpl : UsersDAOFacade {
             val idToUpdate = userToUpdate.id
 
             //execute update statement
-            val updateStatement = Users.update({Users.email eq updatedUser.email}) {
+            val updateStatement = Users.update({Users.id eq userId}) {
                 it[firstName] = updatedUser.firstName
                 it[lastName] = updatedUser.lastName
                 it[email] = updatedUser.email

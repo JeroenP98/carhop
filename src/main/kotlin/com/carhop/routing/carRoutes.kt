@@ -30,7 +30,7 @@ fun Route.carRoutes() {
                     if (newCar != null) {
                         call.respond(HttpStatusCode.OK, mapOf("car" to newCar))
                     } else  {
-                        call.respond(HttpStatusCode.Forbidden, ResponseStatus("Unable to register car"))
+                        call.respond(HttpStatusCode.Forbidden, ResponseStatus("Unable to register car/ Lisence plate already exists"))
                     }
 
                 } else {
