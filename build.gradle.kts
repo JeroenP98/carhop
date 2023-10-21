@@ -4,6 +4,10 @@ val logback_version: String by project
 
 val exposed_version: String by project
 
+tasks.test {
+    useJUnitPlatform()
+}
+
 plugins {
     kotlin("jvm") version "1.9.10"
     id("io.ktor.plugin") version "2.3.5"
@@ -37,7 +41,10 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:$logback_version")
     testImplementation("io.ktor:ktor-server-tests-jvm")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+    testImplementation ("org.junit.jupiter:junit-jupiter:5.9.2")
     implementation("org.postgresql:postgresql:42.3.8")
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.1")
+    implementation("org.jetbrains.exposed:exposed-java-time:$exposed_version")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
 
 }

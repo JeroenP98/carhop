@@ -1,4 +1,4 @@
-package com.carhop.dto
+package com.carhop.dto.users
 
 import com.carhop.models.UserType
 import kotlinx.serialization.Serializable

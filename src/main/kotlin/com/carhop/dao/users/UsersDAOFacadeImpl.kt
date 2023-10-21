@@ -1,8 +1,8 @@
 package com.carhop.dao.users
 
-import com.carhop.dto.LoginRequestDTO
-import com.carhop.dto.RegisterUserDto
-import com.carhop.dto.UpdateUserDTO
+import com.carhop.dto.users.LoginRequestDTO
+import com.carhop.dto.users.RegisterUserDto
+import com.carhop.dto.users.UpdateUserDTO
 import com.carhop.entities.Users
 import com.carhop.models.User
 import com.carhop.plugins.DatabaseFactory.dbQuery
@@ -13,17 +13,20 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class UsersDAOFacadeImpl : UsersDAOFacade {
-    private fun resultRowToUser(row: ResultRow) = User (
-        // function for mapping the record returned by sql expression to user class
-        id = row[Users.id],
-        firstName = row[Users.firstName],
-        lastName = row[Users.lastName],
-        email = row[Users.email],
-        password = row[Users.password],
-        drivingScore = row[Users.drivingScore],
-        userType = row[Users.userType]
-    )
+    companion object {
+        fun resultRowToUser(row: ResultRow) = User (
+            // function for mapping the record returned by sql expression to user class
+            id = row[Users.id],
+            firstName = row[Users.firstName],
+            lastName = row[Users.lastName],
+            email = row[Users.email],
+            password = row[Users.password],
+            drivingScore = row[Users.drivingScore],
+            userType = row[Users.userType]
+        )
+    }
 
+    //add new user record to database
     override suspend fun registerUser(newUser: RegisterUserDto): User? = dbQuery {
         // verify if user email is unique
         val isEmailUnique = Users.select(Users.email eq newUser.email).empty()
@@ -44,6 +47,7 @@ class UsersDAOFacadeImpl : UsersDAOFacade {
         }
     }
 
+    //check user credentials and return User object if credentials are correct
     override suspend fun loginUser(loginRequest: LoginRequestDTO): User? {
         val user = transaction {
             Users.select { Users.email eq loginRequest.email }.map { resultRowToUser(it) }.singleOrNull()
@@ -56,6 +60,7 @@ class UsersDAOFacadeImpl : UsersDAOFacade {
         }
     }
 
+    //get single user based on id
     override suspend fun getUser(userId: Int): User? {
         //return user by id
         val user = transaction {
@@ -65,10 +70,16 @@ class UsersDAOFacadeImpl : UsersDAOFacade {
         return user
     }
 
-    override suspend fun updateUser(updatedUser: UpdateUserDTO): User?  = dbQuery{
+    //get all users
+    override suspend fun getAllUsers(): List<User?> = dbQuery {
+        Users.selectAll().map(::resultRowToUser)
+    }
+
+    //update a user
+    override suspend fun updateUser(updatedUser: UpdateUserDTO, userId: Int): User?  = dbQuery{
 
         //retrieve the user to be updated
-        val userToUpdate = Users.select { Users.email eq updatedUser.email }.map { resultRowToUser(it) }.singleOrNull()
+        val userToUpdate = Users.select { Users.id eq userId }.map { resultRowToUser(it) }.singleOrNull()
 
 
         if (userToUpdate != null) {
@@ -76,7 +87,7 @@ class UsersDAOFacadeImpl : UsersDAOFacade {
             val idToUpdate = userToUpdate.id
 
             //execute update statement
-            val updateStatement = Users.update({Users.email eq updatedUser.email}) {
+            val updateStatement = Users.update({Users.id eq userId}) {
                 it[firstName] = updatedUser.firstName
                 it[lastName] = updatedUser.lastName
                 it[email] = updatedUser.email
@@ -97,6 +108,7 @@ class UsersDAOFacadeImpl : UsersDAOFacade {
         }
     }
 
+    //delete user based on id
     override suspend fun deleteUser(userId: Int) {
         transaction {
             Users.deleteWhere { id eq userId }
@@ -106,8 +118,4 @@ class UsersDAOFacadeImpl : UsersDAOFacade {
 
 
 // implement the user DAO class to be used in routing handling
-val userDAO: UsersDAOFacade = UsersDAOFacadeImpl().apply {
-    runBlocking {
-
-    }
-}
+val userDAO: UsersDAOFacade = UsersDAOFacadeImpl()

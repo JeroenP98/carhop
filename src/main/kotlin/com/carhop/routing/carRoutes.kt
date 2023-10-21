@@ -1,12 +1,10 @@
 package com.carhop.routing
 
-import com.carhop.dao.users.carDAO
-import com.carhop.dto.RegisterCarDTO
-import com.carhop.dto.UpdateCarDTO
-import com.carhop.entities.Cars
+import com.carhop.dao.cars.carDAO
+import com.carhop.dto.cars.RegisterCarDTO
+import com.carhop.dto.cars.UpdateCarDTO
+import com.carhop.entities.checkCarExists
 import com.carhop.models.ResponseStatus
-import com.carhop.plugins.DatabaseFactory.dbQuery
-import com.carhop.utils.TokenManager
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -14,15 +12,8 @@ import io.ktor.server.auth.jwt.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.transactions.transaction
 
 fun Route.carRoutes() {
-    //create instance of the token manager to handle out tokens
-
-    //create instance of the token manager to handle out tokens
-    val tokenManager = TokenManager()
-
     authenticate("user") {
         route("cars/register") {
             post {
@@ -39,7 +30,7 @@ fun Route.carRoutes() {
                     if (newCar != null) {
                         call.respond(HttpStatusCode.OK, mapOf("car" to newCar))
                     } else  {
-                        call.respond(HttpStatusCode.Forbidden, ResponseStatus("Unable to register car"))
+                        call.respond(HttpStatusCode.Forbidden, ResponseStatus("Unable to register car/ Lisence plate already exists"))
                     }
 
                 } else {
@@ -50,7 +41,7 @@ fun Route.carRoutes() {
 
         route("cars/search") {
             get {
-                val carList = carDAO.searchCars()
+                val carList = carDAO.getAllCars()
 
                 call.respond(HttpStatusCode.OK, carList)
             }
@@ -129,6 +120,28 @@ fun Route.carRoutes() {
                 }
 
 
+            }
+        }
+
+        route("cars/{id}/tco") {
+            get {
+                val requestedCarId = call.parameters["id"]?.toIntOrNull()
+
+                if (requestedCarId != null) {
+                    val doesCarExist = checkCarExists(requestedCarId)
+                    if (doesCarExist) {
+                        val tco = carDAO.getTotalCostOfOwnership(requestedCarId)
+                        if (tco != null) {
+                            call.respond(HttpStatusCode.OK, mapOf("TCO" to tco))
+                        } else {
+                            call.respond(HttpStatusCode.BadRequest, "Could not calculate TCO")
+                        }
+                    } else {
+                        call.respond(HttpStatusCode.BadRequest, ResponseStatus("Car id not found"))
+                    }
+                } else {
+                    call.respond(HttpStatusCode.BadRequest, ResponseStatus("invalid parameters"))
+                }
             }
         }
     }
