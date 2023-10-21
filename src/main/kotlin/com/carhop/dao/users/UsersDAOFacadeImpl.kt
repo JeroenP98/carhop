@@ -26,7 +26,7 @@ class UsersDAOFacadeImpl : UsersDAOFacade {
         )
     }
 
-
+    //add new user record to database
     override suspend fun registerUser(newUser: RegisterUserDto): User? = dbQuery {
         // verify if user email is unique
         val isEmailUnique = Users.select(Users.email eq newUser.email).empty()
@@ -47,6 +47,7 @@ class UsersDAOFacadeImpl : UsersDAOFacade {
         }
     }
 
+    //check user credentials and return User object if credentials are correct
     override suspend fun loginUser(loginRequest: LoginRequestDTO): User? {
         val user = transaction {
             Users.select { Users.email eq loginRequest.email }.map { resultRowToUser(it) }.singleOrNull()
@@ -59,6 +60,7 @@ class UsersDAOFacadeImpl : UsersDAOFacade {
         }
     }
 
+    //get single user based on id
     override suspend fun getUser(userId: Int): User? {
         //return user by id
         val user = transaction {
@@ -68,10 +70,12 @@ class UsersDAOFacadeImpl : UsersDAOFacade {
         return user
     }
 
+    //get all users
     override suspend fun getAllUsers(): List<User?> = dbQuery {
         Users.selectAll().map(::resultRowToUser)
     }
 
+    //update a user
     override suspend fun updateUser(updatedUser: UpdateUserDTO): User?  = dbQuery{
 
         //retrieve the user to be updated
@@ -104,6 +108,7 @@ class UsersDAOFacadeImpl : UsersDAOFacade {
         }
     }
 
+    //delete user based on id
     override suspend fun deleteUser(userId: Int) {
         transaction {
             Users.deleteWhere { id eq userId }
@@ -113,8 +118,4 @@ class UsersDAOFacadeImpl : UsersDAOFacade {
 
 
 // implement the user DAO class to be used in routing handling
-val userDAO: UsersDAOFacade = UsersDAOFacadeImpl().apply {
-    runBlocking {
-
-    }
-}
+val userDAO: UsersDAOFacade = UsersDAOFacadeImpl()

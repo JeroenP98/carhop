@@ -5,6 +5,7 @@ import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 
+//Exposed table used for storing user records
 object Users: Table() {
     val id: Column<Int> = integer("id").autoIncrement().uniqueIndex()
     val firstName: Column<String> = varchar("first_name",255)

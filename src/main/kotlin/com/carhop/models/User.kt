@@ -14,7 +14,7 @@ data class User (
 
 )
 
-
+//limit user types to the following values
 enum class UserType(val userType: String) {
     USER("user"),
     ADMIN("admin")

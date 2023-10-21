@@ -5,6 +5,7 @@ import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.jetbrains.exposed.sql.transactions.transaction
 
+//object for sotring database connection variables
 object DatabaseFactory {
     fun init() {
         val driverClassName = "org.postgresql.Driver"

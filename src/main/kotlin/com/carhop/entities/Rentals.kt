@@ -5,6 +5,7 @@ import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.javatime.date
 
+//Exposed table used for storing rental records
 object Rentals: Table() {
     val id: Column<Int> = integer("id").autoIncrement().uniqueIndex()
     val carId: Column<Int> = integer("car_id").references(Cars.id)
