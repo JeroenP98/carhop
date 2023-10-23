@@ -81,7 +81,7 @@ class UsersDAOFacadeImplTest {
         // Initialiseer de database
         DatabaseFactory.init()
         // gegevens voor gebruikersaanmelding
-        val loginRequest = LoginRequestDTO("Jeroen@test.com", "123456")
+        val loginRequest = LoginRequestDTO("jeroen@user.com", "12345")
         val json = Json.encodeToString(loginRequest)
         // Voer een POST-verzoek uit om in te logge
         val response = client.post("/users/login") {

@@ -11,7 +11,7 @@ object DatabaseFactory {
         val driverClassName = "org.postgresql.Driver"
         val jdbcURL = "jdbc:postgresql://localhost:5432/carhop"
         val user = "postgres"
-        val password = "12345"
+        val password = "postgres"
         val database = Database.connect(url = jdbcURL, driver = driverClassName, user, password)
 
     }
