@@ -29,66 +29,66 @@ class UsersDAOFacadeImplTest {
             configureSecurity()
             configureRouting()
         }
-        // Creëer een HTTP-client voor de test
+        // Create an HTTP client for the test
         val client = createClient {
             this@testApplication.install(ContentNegotiation) {
                 json(Json { prettyPrint = true
                     isLenient = true})
             }
         }
-        // Initialiseer de database
+        // Initialize the database
         DatabaseFactory.init()
-        // gegevens voor nieuwe gebruikerregistratie
+        // data for new user registration
         val userRegisterReqeust = RegisterUserDto("testUser", "testLastName", "test@email.com", "test", 0,"user")
         val json = Json.encodeToString(userRegisterReqeust)
-        // Voer een POST-verzoek uit om de gebruiker te registreren
+        // Do a POST request to register the user
         val response = client.post("/users/register") {
             header(HttpHeaders.ContentType, ContentType.Application.Json.toString())
             setBody(json)
         }
         val statusCode = response.status
         val responseBody = response.body<String>()
-        // Controleer of de registratie succesvol was
+        // Check if the registration was successful
         assertEquals(HttpStatusCode.OK, statusCode)
-        // Haal de geregistreerde gebruiker op uit de database
+        // Retrieve the registered user from the database
         lateinit var userDAO: UsersDAOFacade
         userDAO = UsersDAOFacadeImpl()
         val registeredUser = LoginRequestDTO(userRegisterReqeust.email,userRegisterReqeust.password )
         val loginRegisteredUser = userDAO.loginUser(registeredUser)
-        // Controleer of de geregistreerde gebruiker overeenkomt met de verwachte e-mail
+        // Verify that the registered user matches the expected email
         if (loginRegisteredUser != null) {
             assertEquals(userRegisterReqeust.email, loginRegisteredUser.email)
         }
-        // Verwijder de geregistreerde gebruiker
+        // Delete the registered user
         val deleteRegisteredUser = loginRegisteredUser?.let { userDAO.deleteUser(it.id) }
 
     }
 
     @Test
     fun loginUser() = testApplication {
-        // Initialiseer de testomgeving met applicatieconfiguratie en JSON-ondersteuning
+        // Initialize the test environment with application configuration and JSON support
         application {
             configureSecurity()
             configureRouting()
         }
-        // Creëer een HTTP-client voor de test
+        // Create an HTTP client for the test
         val client = createClient {
             this@testApplication.install(ContentNegotiation) {
                 json(Json { prettyPrint = true
                     isLenient = true})
             }
         }
-        // Initialiseer de database
+        //Initialize the database
         DatabaseFactory.init()
-        // gegevens voor gebruikersaanmelding
+        // user login information
         val loginRequest = LoginRequestDTO("jeroen@user.com", "12345")
         val json = Json.encodeToString(loginRequest)
-        // Voer een POST-verzoek uit om in te logge
+        //Do a POST request to log in
         val response = client.post("/users/login") {
             header(HttpHeaders.ContentType, ContentType.Application.Json.toString())
             setBody(json)
         }
-        // Controleer of de inlogpoging succesvol was
+        // Check whether the login attempt was successful
         val statusCode = response.status
         val responseBody = response.body<String>()
 
@@ -98,36 +98,36 @@ class UsersDAOFacadeImplTest {
 
     @Test
     fun getUser() = testApplication {
-        // Initialiseer de testomgeving met applicatieconfiguratie en JSON-ondersteuning
+        // Initialize the test environment with application configuration and JSON support
         application {
             configureSecurity()
             configureRouting()
         }
-        // Creëer een HTTP-client voor de test
+        // Create an HTTP client for the test
         val client = createClient {
             this@testApplication.install(ContentNegotiation) {
                 json(Json { prettyPrint = true
                     isLenient = true})
             }
         }
-        // Initialiseer de database
+        // Initialize the database
         DatabaseFactory.init()
 
-        // Haal de verwachte gebruiker op uit de database en genereer een JWT-token voor authenticatie
+        //Retrieve the expected user from the database and generate a JWT token for authentication
         lateinit var userDAO: UsersDAOFacade
         userDAO = UsersDAOFacadeImpl()
         val Expecteduser = userDAO.getUser(2)
         val tokenManager = TokenManager()
             val token = Expecteduser?.let { tokenManager.generateJWTToken(it) }
 
-        // Voer een GET-verzoek uit om het gebruikersprofiel op te halen
+        //Do a GET request to retrieve the user profile
         val response = client.get("/users/profile/2"){
             headers { append(HttpHeaders.Authorization, "Bearer " + token) }
         }.body<String>()
 
         val user = Json.decodeFromString<User>(response)
 
-        // Controleer of de opgehaalde gebruiker overeenkomt met de verwachte gebruiker
+        // Verify that the retrieved user matches the expected user
         assertEquals(Expecteduser, user)
 
 
