@@ -16,6 +16,7 @@ interface CarsDAOFacade {
 
     suspend fun deleteCar(carId: Int)
     suspend fun getOwnerIdByCarId(requestedId: Int): Int?
+    suspend fun getTotalCostOfOwnership(carId: Int): Double?
 
 
 

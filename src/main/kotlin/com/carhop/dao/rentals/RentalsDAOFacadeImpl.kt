@@ -19,14 +19,18 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 class RentalsDAOFacadeImpl : RentalsDAOFacade {
 
-    private fun resultRowToRental(row: ResultRow) = Rental (
-        id = row[Rentals.id],
-        carId = row[Rentals.carId],
-        renterId = row[Rentals.renterId],
-        startDate = row[Rentals.startDate].toKotlinLocalDate(),
-        endDate = row[Rentals.endDate].toKotlinLocalDate(),
-        cost = row[Rentals.cost],
-    )
+    companion object {
+        fun resultRowToRental(row: ResultRow) = Rental (
+            id = row[Rentals.id],
+            carId = row[Rentals.carId],
+            renterId = row[Rentals.renterId],
+            startDate = row[Rentals.startDate].toKotlinLocalDate(),
+            endDate = row[Rentals.endDate].toKotlinLocalDate(),
+            cost = row[Rentals.cost],
+        )
+    }
+
+    //add new rental record
     override suspend fun registerRental(registerRentalDTO: RegisterRentalDTO): Rental? = dbQuery {
         val insertStatement = transaction {
             Rentals.insert {
@@ -40,6 +44,7 @@ class RentalsDAOFacadeImpl : RentalsDAOFacade {
         insertStatement.resultedValues?.singleOrNull()?.let(::resultRowToRental)
     }
 
+    //return single rental based on id
     override suspend fun getRental(rentalId: Int): Rental? {
         val rental = transaction {
             Rentals.select { Rentals.id eq  rentalId}.map { resultRowToRental(it) }.singleOrNull()
@@ -49,12 +54,14 @@ class RentalsDAOFacadeImpl : RentalsDAOFacade {
         return rental
     }
 
+    //return all rentals in list collection
     override suspend fun getAllRentals(): List<Rental> = dbQuery {
         Rentals.selectAll().map(::resultRowToRental)
     }
 
+    // determine if there are any overlapping reservations for a given car by asserting (StartA <= EndB) and (EndA >= StartB)
     override suspend fun checkTimeAvailability(carId: Int, startDate: LocalDate, endDate: LocalDate): Boolean {
-        // determine if there are any overlapping reservations for a given car by asserting (StartA <= EndB) and (EndA >= StartB)
+
         val overlappingReservation = transaction {
             Rentals.select {
                 (Rentals.carId eq carId) and
@@ -67,6 +74,7 @@ class RentalsDAOFacadeImpl : RentalsDAOFacade {
 
     }
 
+    //check if a car is registered as available
     override suspend fun checkCarAvailability(carId: Int): Boolean {
         return transaction {
             val carRow = Cars.select { (Cars.id eq carId) and (Cars.available eq true) }.singleOrNull()
@@ -74,6 +82,7 @@ class RentalsDAOFacadeImpl : RentalsDAOFacade {
         }
     }
 
+    //delete a rental based on id
     override suspend fun deleteRental(rentalId: Int) {
 
         transaction {
@@ -82,6 +91,7 @@ class RentalsDAOFacadeImpl : RentalsDAOFacade {
 
     }
 
+    //return the owner of the rented car as User object based on a rental id
     override suspend fun returnOwner(rentalId: Int): User? {
 
         val rental = this.getRental(rentalId)
@@ -101,6 +111,7 @@ class RentalsDAOFacadeImpl : RentalsDAOFacade {
         }
     }
 
+    //return the renter of the car as User object based on rental id
     override suspend fun returnRenter(rentalId: Int): User? {
         val rental = this.getRental(rentalId)
 
@@ -113,15 +124,14 @@ class RentalsDAOFacadeImpl : RentalsDAOFacade {
         }
     }
 
+    //check if the rental happened in the past
     override suspend fun checkIfRentalIsInPast(rental: Rental): Boolean {
         val currentDate = Clock.System.todayIn(TimeZone.currentSystemDefault())
         return rental.startDate > currentDate && rental.endDate > currentDate
     }
 }
 
-val rentalDao: RentalsDAOFacade = RentalsDAOFacadeImpl().apply {
-    runBlocking {
+//initialize the car DAO
+val rentalDao: RentalsDAOFacade = RentalsDAOFacadeImpl()
 
-    }
-}
 

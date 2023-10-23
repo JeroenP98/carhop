@@ -3,6 +3,7 @@ package com.carhop.routing
 import com.carhop.dao.cars.carDAO
 import com.carhop.dto.cars.RegisterCarDTO
 import com.carhop.dto.cars.UpdateCarDTO
+import com.carhop.entities.checkCarExists
 import com.carhop.models.ResponseStatus
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -29,7 +30,7 @@ fun Route.carRoutes() {
                     if (newCar != null) {
                         call.respond(HttpStatusCode.OK, mapOf("car" to newCar))
                     } else  {
-                        call.respond(HttpStatusCode.Forbidden, ResponseStatus("Unable to register car"))
+                        call.respond(HttpStatusCode.Forbidden, ResponseStatus("Unable to register car/ Lisence plate already exists"))
                     }
 
                 } else {
@@ -119,6 +120,28 @@ fun Route.carRoutes() {
                 }
 
 
+            }
+        }
+
+        route("cars/{id}/tco") {
+            get {
+                val requestedCarId = call.parameters["id"]?.toIntOrNull()
+
+                if (requestedCarId != null) {
+                    val doesCarExist = checkCarExists(requestedCarId)
+                    if (doesCarExist) {
+                        val tco = carDAO.getTotalCostOfOwnership(requestedCarId)
+                        if (tco != null) {
+                            call.respond(HttpStatusCode.OK, mapOf("TCO" to tco))
+                        } else {
+                            call.respond(HttpStatusCode.BadRequest, "Could not calculate TCO")
+                        }
+                    } else {
+                        call.respond(HttpStatusCode.BadRequest, ResponseStatus("Car id not found"))
+                    }
+                } else {
+                    call.respond(HttpStatusCode.BadRequest, ResponseStatus("invalid parameters"))
+                }
             }
         }
     }

@@ -1,6 +1,9 @@
 package com.carhop.dto.cars
 
+import com.carhop.models.FuelType
 import kotlinx.serialization.Serializable
+
+//variables needed for updating an existing car
 @Serializable
 data class UpdateCarDTO (
     val licensePlate: String,
@@ -15,7 +18,7 @@ data class UpdateCarDTO (
     val monthlyInsuranceCost: Double,
     val yearlyMaintenanceCost: Double,
     val range: Double?,
-    val fuelType: String?,
+    val fuelType: FuelType,
     val transmission: String?
 
 )

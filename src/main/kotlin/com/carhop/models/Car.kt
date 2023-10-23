@@ -20,7 +20,13 @@ data class Car (
     val monthlyInsuranceCost: Double,
     val yearlyMaintenanceCost: Double,
     val range: Double?,
-    val fuelType: String?,
+    val fuelType: FuelType,
     val transmission: String?
 
 )
+
+enum class FuelType(val fuelType: String) {
+    ELECTRIC("electric"),
+    HYBRID("hybrid"),
+    GASOLINE("gasoline")
+}

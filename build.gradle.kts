@@ -35,12 +35,13 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
     implementation("io.ktor:ktor-server-netty-jvm")
     implementation("ch.qos.logback:logback-classic:$logback_version")
-    //implementation("org.junit.jupiter:junit-jupiter:5.8.1")
     testImplementation("io.ktor:ktor-server-tests-jvm")
-    //testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+    testImplementation ("org.junit.jupiter:junit-jupiter:5.9.2")
     implementation("org.postgresql:postgresql:42.3.8")
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.1")
     implementation("org.jetbrains.exposed:exposed-java-time:$exposed_version")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
 
     testImplementation("io.ktor:ktor-server-test-host:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test:1.9.10")
@@ -49,8 +50,4 @@ dependencies {
 
     testImplementation ("org.junit.jupiter:junit-jupiter:5.9.2")
     testImplementation(kotlin("test"))
-}
-
-tasks.test {
-    useJUnitPlatform()
 }
