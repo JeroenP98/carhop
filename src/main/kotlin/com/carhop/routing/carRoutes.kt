@@ -1,23 +1,30 @@
 package com.carhop.routing
 
 import com.carhop.dao.cars.carDAO
+import com.carhop.dto.cars.CarImageResponse
 import com.carhop.dto.cars.RegisterCarDTO
 import com.carhop.dto.cars.UpdateCarDTO
 import com.carhop.entities.checkCarExists
 import com.carhop.models.ResponseStatus
 import io.ktor.http.*
+import io.ktor.http.content.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import net.coobird.thumbnailator.Thumbnails
+import java.io.File
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
 
 fun Route.carRoutes() {
     authenticate("user") {
         route("cars/register") {
             post {
                 val car = call.receive<RegisterCarDTO>()
+
 
                 //retrieve JWT token from HTTP header
                 val token = call.principal<JWTPrincipal>()
@@ -52,7 +59,7 @@ fun Route.carRoutes() {
                 val requestedCar = call.parameters["id"]?.toIntOrNull()
 
                 if (requestedCar != null) {
-                    val car = carDAO.getCar(requestedCar)
+                    val car = carDAO.getCarWithImage(requestedCar)
                     if (car != null) {
                         call.respond(HttpStatusCode.OK, car)
                     } else {
@@ -91,11 +98,8 @@ fun Route.carRoutes() {
                 } else {
                     call.respond(HttpStatusCode.BadRequest, ResponseStatus("Invalid parameters"))
                 }
-
-
-
-
             }
+
 
             delete {
                 val requestedId = call.parameters["id"]
@@ -109,7 +113,6 @@ fun Route.carRoutes() {
 
                     if (carBelongsTo == userId.toInt()) {
 
-                        // TODO: implement logic to deny users from deleting cars when there are still active rentals
                         carDAO.deleteCar(requestedId.toInt())
                         call.respond(HttpStatusCode.OK, ResponseStatus("Car deleted"))
                     } else {
@@ -119,6 +122,46 @@ fun Route.carRoutes() {
                     call.respond(HttpStatusCode.BadRequest, ResponseStatus("Invalid parameters"))
                 }
 
+
+            }
+        }
+
+        route("cars/{id}/image") {
+            post {
+                val requestedCarId = call.parameters["id"]?.toIntOrNull()
+                val imagesDir = File(javaClass.classLoader.getResource("images")!!.file)
+                if (!imagesDir.exists()) {
+                    imagesDir.mkdirs()
+                }
+
+                val multipart = call.receiveMultipart()
+                multipart.forEachPart { part ->
+                    if (part is PartData.FileItem) {
+                        val fileBytes = part.streamProvider().readBytes()
+                        val name = "car_${requestedCarId}_image"
+                        val originalFile = File("${imagesDir}/${name}.jpg")
+
+
+                        Thumbnails.of(originalFile)
+                            .size(200, 200)
+                            .toFile(originalFile)
+
+                        call.respond(HttpStatusCode.OK, CarImageResponse("${BASE_URL}images/${name}.jpg"))
+
+                    }
+                    part.dispose()
+                }
+
+            }
+            get {
+                val requestedCarId = call.parameters["id"]?.toIntOrNull()
+                if (requestedCarId != null) {
+                    val name = "car_${requestedCarId}_image"
+                    val imageUrl = "images/${name}.jpg"
+                    call.respond(HttpStatusCode.OK, CarImageResponse("$BASE_URL$imageUrl"))
+                } else {
+                    call.respond(HttpStatusCode.BadRequest, ResponseStatus("Invalid parameters"))
+                }
 
             }
         }
@@ -144,6 +187,30 @@ fun Route.carRoutes() {
                 }
             }
         }
+        route("cars/{id}/location") {
+            get {
+                val requestedCarId = call.parameters["id"]?.toIntOrNull()
+
+                if (requestedCarId != null) {
+                    val doesCarExist = checkCarExists(requestedCarId)
+                    if (doesCarExist) {
+                        val carLocation = carDAO.getCarLocation(requestedCarId)
+                        if (carLocation != null) {
+                            call.respond(HttpStatusCode.OK, carLocation)
+                        } else {
+                            call.respond(HttpStatusCode.BadRequest, "Could not retrieve location")
+                        }
+                    } else {
+                        call.respond(HttpStatusCode.BadRequest, ResponseStatus("Car id not found"))
+                    }
+                } else {
+                    call.respond(HttpStatusCode.BadRequest, ResponseStatus("invalid parameters"))
+                }
+            }
+        }
+
     }
 
 }
+
+const val BASE_URL = "http://127.0.0.1:8080/"

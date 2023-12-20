@@ -11,7 +11,6 @@ class TokenManager {
     private val jwtAudience = "jwt-audience"
     private val jwtDomain = "127.0.0.1:8080"
     private val jwtSecret = "secret"
-    private val expirationDate = System.currentTimeMillis() + 24 * 60 * 60000 // 24 hours
 
     //generate token with user specific data
     fun generateJWTToken(user: User): String {
@@ -22,7 +21,6 @@ class TokenManager {
             .withClaim("email", user.email)
             .withClaim("id", user.id)
             .withClaim("userType", user.userType)
-            .withExpiresAt(Date(expirationDate))
             .sign(Algorithm.HMAC256(jwtSecret))
     }
 }

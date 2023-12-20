@@ -19,7 +19,9 @@ data class UpdateCarDTO (
     val yearlyMaintenanceCost: Double,
     val range: Double?,
     val fuelType: FuelType,
-    val transmission: String?
+    val transmission: String?,
+    val latitude: Double,
+    val longitude: Double
 
 )
 

@@ -1,11 +1,14 @@
 package com.carhop.dao.cars
 
+import com.carhop.dto.cars.CarWithImageResponse
 import com.carhop.dto.cars.RegisterCarDTO
 import com.carhop.dto.cars.UpdateCarDTO
 import com.carhop.entities.Cars
 import com.carhop.entities.Users
 import com.carhop.models.Car
+import com.carhop.models.CarLocation
 import com.carhop.plugins.DatabaseFactory.dbQuery
+import com.carhop.routing.BASE_URL
 import kotlinx.coroutines.runBlocking
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
@@ -16,7 +19,7 @@ class CarsDAOFacadeImpl : CarsDAOFacade {
 
     companion object {
         // function for transforming SQL query results to Car object
-        fun resultRowToCar(row: ResultRow) = Car (
+        fun resultRowToCar(row: ResultRow) = Car(
             id = row[Cars.id],
             ownerId = row[Cars.ownerId],
             licensePlate = row[Cars.licensePlate],
@@ -33,19 +36,19 @@ class CarsDAOFacadeImpl : CarsDAOFacade {
             range = row[Cars.range],
             fuelType = row[Cars.fuelType],
             transmission = row[Cars.transmission],
+            latitude = row[Cars.latitude],
+            longitude = row[Cars.longitude]
 
-            )
+        )
     }
-
-
 
 
     override suspend fun registerCar(newCar: RegisterCarDTO): Car? = dbQuery {
         //check if license plate exist and owner exists
         val isLicensePlateUnique = Cars.select(Cars.licensePlate eq newCar.licensePlate).empty()
-        val userConsists = !Users.select(Users.id eq newCar.UserId ).empty()
+        val userConsists = !Users.select(Users.id eq newCar.UserId).empty()
 
-        if (isLicensePlateUnique && userConsists ) {
+        if (isLicensePlateUnique && userConsists) {
             val insertStatement = Cars.insert {
                 it[ownerId] = newCar.UserId
                 it[licensePlate] = newCar.licensePlate
@@ -62,6 +65,8 @@ class CarsDAOFacadeImpl : CarsDAOFacade {
                 it[range] = newCar.range
                 it[fuelType] = newCar.fuelType
                 it[transmission] = newCar.transmission
+                it[longitude] = newCar.longitude
+                it[latitude] = newCar.latitude
             }
             //return the resulted value as a Car object
             insertStatement.resultedValues?.singleOrNull()?.let(::resultRowToCar)
@@ -70,10 +75,11 @@ class CarsDAOFacadeImpl : CarsDAOFacade {
         }
     }
 
-    override suspend fun updateCar (updatedCar: UpdateCarDTO): Car?  = dbQuery {
+    override suspend fun updateCar(updatedCar: UpdateCarDTO): Car? = dbQuery {
         //retrieve car object to update and check if it exists
-        val carToUpdate = Cars.select(Cars.licensePlate eq updatedCar.licensePlate).map {resultRowToCar(it)}.singleOrNull()
-        if (carToUpdate != null){
+        val carToUpdate =
+            Cars.select(Cars.licensePlate eq updatedCar.licensePlate).map { resultRowToCar(it) }.singleOrNull()
+        if (carToUpdate != null) {
             //use the license plate as unique identifier for the car
             val carIdToUpdate = updatedCar.licensePlate
 
@@ -92,17 +98,19 @@ class CarsDAOFacadeImpl : CarsDAOFacade {
                 it[range] = updatedCar.range
                 it[fuelType] = updatedCar.fuelType
                 it[transmission] = updatedCar.transmission
+                it[longitude] = updatedCar.longitude
+                it[latitude] = updatedCar.latitude
             }
             /*if the no. updated rows is lower than one (meaning no rows were updated), return null.
             else, return the updated car as Car object*/
-            if (carUpdateStatement < 1){
+            if (carUpdateStatement < 1) {
                 null
-            }else{
+            } else {
 
                 Cars.select { Cars.licensePlate eq carIdToUpdate }.map { resultRowToCar(it) }.singleOrNull()
             }
 
-        }else {
+        } else {
             null
         }
 
@@ -121,6 +129,48 @@ class CarsDAOFacadeImpl : CarsDAOFacade {
         }
 
         return car
+    }
+
+    override suspend fun getCarWithImage(carId: Int): CarWithImageResponse? {
+        val car = transaction {
+            Cars.select { Cars.id eq carId }.map { resultRowToCar(it) }.singleOrNull()
+        }
+        if (car != null) {
+            val imageUrl = "${BASE_URL}images/car_${carId}_image.jpg"
+            return CarWithImageResponse(
+                car.id,
+                car.ownerId,
+                car.licensePlate,
+                car.rentalPrice,
+                car.available,
+                car.brandName,
+                car.modelName,
+                car.buildYear,
+                car.numOfSeats,
+                car.emissionCategory,
+                car.purchasePrice,
+                car.monthlyInsuranceCost,
+                car.yearlyMaintenanceCost,
+                car.range,
+                car.fuelType,
+                car.transmission,
+                car.latitude,
+                car.longitude,
+                imageUrl
+            )
+        } else {
+            return null
+        }
+    }
+
+    override suspend fun getCarLocation(carId: Int): CarLocation? {
+        val car = this.getCar(carId)
+        return if (car != null) {
+            val carLocation = CarLocation(car.id, car.latitude, car.longitude)
+            carLocation
+        } else {
+            null
+        }
     }
 
     //delete car based on id value
@@ -166,6 +216,7 @@ class CarsDAOFacadeImpl : CarsDAOFacade {
                     otherCosts = yearlyMaintenance + (monthlyInsurance * 12.0) + depreciation
                     totalCostOfOwnership = purchasePrice + otherCosts
                 }
+
                 "hybrid" -> {
                     // Define TCO calculations for hybrid cars
                     depreciation = purchasePrice / 12.0 // 8% depreciation per year
@@ -173,6 +224,7 @@ class CarsDAOFacadeImpl : CarsDAOFacade {
                     otherCosts = yearlyMaintenance + (monthlyInsurance * 12.0) + depreciation
                     totalCostOfOwnership = purchasePrice + otherCosts + fuelCost
                 }
+
                 "gasoline" -> {
                     // Define TCO calculations for gasoline cars
                     depreciation = purchasePrice / 8.0 // 12.5% depreciation per year
@@ -180,6 +232,7 @@ class CarsDAOFacadeImpl : CarsDAOFacade {
                     otherCosts = yearlyMaintenance + (monthlyInsurance * 12.0) + depreciation
                     totalCostOfOwnership = purchasePrice + otherCosts + fuelCost
                 }
+
                 else -> return null // Unknown fuel type
             }
             // round return value to two decimal places
