@@ -3,9 +3,9 @@ package com.carhop.models
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Location(
+data class CarLocation(
+    val carId: Int,
     val latitude: Double,
     val longitude: Double,
-    val name: String?,
-    val address: String?
+
 )

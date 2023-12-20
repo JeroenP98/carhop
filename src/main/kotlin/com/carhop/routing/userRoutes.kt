@@ -2,6 +2,7 @@ package com.carhop.routing
 
 import com.carhop.dao.users.userDAO
 import com.carhop.dto.users.LoginRequestDTO
+import com.carhop.dto.users.LoginResponse
 import com.carhop.dto.users.RegisterUserDto
 import com.carhop.dto.users.UpdateUserDTO
 import com.carhop.models.ResponseStatus
@@ -36,7 +37,7 @@ fun Route.userRoutes() {
                 if (newUser != null) {
                     //create token if user was created
                     val jwtToken = tokenManager.generateJWTToken(newUser)
-                    call.respond(HttpStatusCode.OK, mapOf("Token" to jwtToken))
+                    call.respond(HttpStatusCode.OK, LoginResponse(jwtToken, newUser.id))
                 }
                 else {
                     call.respond(HttpStatusCode.Forbidden, ResponseStatus("User/Email already exists"))
@@ -54,7 +55,7 @@ fun Route.userRoutes() {
 
             if (isLoginRequestValid != null) {
                 val jwtToken = tokenManager.generateJWTToken(isLoginRequestValid)
-                call.respond(HttpStatusCode.OK, mapOf("token" to jwtToken))
+                call.respond(HttpStatusCode.OK, LoginResponse(jwtToken, isLoginRequestValid.id))
             } else {
                 call.respond(HttpStatusCode.Forbidden, ResponseStatus("Invalid email or password"))
             }

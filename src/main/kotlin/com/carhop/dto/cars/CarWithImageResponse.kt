@@ -2,12 +2,11 @@ package com.carhop.dto.cars
 
 import com.carhop.models.FuelType
 import kotlinx.serialization.Serializable
-import org.jetbrains.exposed.sql.Column
 
-//variables needed for registering a new car
 @Serializable
-data class RegisterCarDTO (
-    val UserId: Int,
+data class CarWithImageResponse(
+    val id: Int,
+    val ownerId: Int,
     val licensePlate: String,
     val rentalPrice: Double,
     val available: Boolean,
@@ -23,5 +22,6 @@ data class RegisterCarDTO (
     val fuelType: FuelType,
     val transmission: String?,
     val latitude: Double,
-    val longitude: Double
+    val longitude: Double,
+    val imageUrl: String
 )

@@ -25,6 +25,8 @@ object Cars: Table() {
     val range: Column<Double?> = double("range").nullable()
     val fuelType: Column<FuelType> = enumerationByName("fuel_type", 50, FuelType::class)
     val transmission: Column<String?> = varchar("transmission",255).nullable()
+    val latitude: Column<Double> = double("latitude")
+    val longitude: Column<Double> = double("longitude")
 
 
     override val primaryKey = PrimaryKey(id)
