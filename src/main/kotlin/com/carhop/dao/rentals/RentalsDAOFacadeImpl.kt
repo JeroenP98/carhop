@@ -129,6 +129,33 @@ class RentalsDAOFacadeImpl : RentalsDAOFacade {
         val currentDate = Clock.System.todayIn(TimeZone.currentSystemDefault())
         return rental.startDate > currentDate && rental.endDate > currentDate
     }
+
+    override suspend fun getAllUserRentals(userId: Int): List<Rental>? {
+        val rentalList = dbQuery {
+            Rentals.select { Rentals.renterId eq userId }.map(::resultRowToRental)
+        }
+
+        return if (rentalList.isNotEmpty()) {
+            rentalList
+        } else {
+            null
+        }
+    }
+
+    override suspend fun getAllUserRentedOutCars(userId: Int): List<Rental>? {
+        val rentalList = dbQuery {
+            (Rentals innerJoin Cars)
+                .slice(Rentals.columns)
+                .select {
+                    (Cars.ownerId eq userId) and (Rentals.carId eq Cars.id)
+                }.map(::resultRowToRental)
+        }
+        return if (rentalList.isNotEmpty()) {
+            rentalList
+        } else {
+            null
+        }
+    }
 }
 
 //initialize the car DAO

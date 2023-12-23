@@ -1,5 +1,7 @@
 package com.carhop.routing
 
+import com.carhop.dao.cars.carDAO
+import com.carhop.dao.rentals.rentalDao
 import com.carhop.dao.users.userDAO
 import com.carhop.dto.users.LoginRequestDTO
 import com.carhop.dto.users.LoginResponse
@@ -129,6 +131,55 @@ fun Route.userRoutes() {
 
 
         }
+        route("users/cars/{id}") {
+            get {
+                val requestedId = call.parameters["id"]?.toIntOrNull()
+
+                if (requestedId != null) {
+                    val carList = carDAO.getAllUserCars(requestedId)
+                    if (carList != null) {
+                        call.respond(HttpStatusCode.OK, carList)
+                    } else {
+                        call.respond(HttpStatusCode.OK, ResponseStatus("No cars found"))
+                    }
+                } else {
+                    call.respond(HttpStatusCode.BadRequest, ResponseStatus("invalid parameters"))
+                }
+            }
+        }
+        route("users/rentals/{id}") {
+            get {
+                val requestedId = call.parameters["id"]?.toIntOrNull()
+
+                if (requestedId != null) {
+                    val rentalList = rentalDao.getAllUserRentals(requestedId)
+                    if (rentalList != null) {
+                        call.respond(HttpStatusCode.OK, rentalList)
+                    } else {
+                        call.respond(HttpStatusCode.OK, ResponseStatus("No rentals found"))
+                    }
+                } else {
+                    call.respond(HttpStatusCode.BadRequest, ResponseStatus("invalid parameters"))
+                }
+            }
+        }
+        route("users/rented/{id}") {
+            get {
+                val requestedId = call.parameters["id"]?.toIntOrNull()
+
+                if (requestedId != null) {
+                    val rentalList = rentalDao.getAllUserRentedOutCars(requestedId)
+                    if (rentalList != null) {
+                        call.respond(HttpStatusCode.OK, rentalList)
+                    } else {
+                        call.respond(HttpStatusCode.OK, ResponseStatus("No rentals found"))
+                    }
+                } else {
+                    call.respond(HttpStatusCode.BadRequest, ResponseStatus("invalid parameters"))
+                }
+            }
+        }
+
     }
 
 }
