@@ -37,7 +37,7 @@ fun Route.carRoutes() {
                     if (newCar != null) {
                         call.respond(HttpStatusCode.OK, mapOf("car" to newCar))
                     } else  {
-                        call.respond(HttpStatusCode.Forbidden, ResponseStatus("Unable to register car/ Lisence plate already exists"))
+                        call.respond(HttpStatusCode.Forbidden, ResponseStatus("Unable to register car/ Licence plate already exists"))
                     }
 
                 } else {
@@ -137,7 +137,6 @@ fun Route.carRoutes() {
                 val multipart = call.receiveMultipart()
                 multipart.forEachPart { part ->
                     if (part is PartData.FileItem) {
-                        val fileBytes = part.streamProvider().readBytes()
                         val name = "car_${requestedCarId}_image"
                         val originalFile = File("${imagesDir}/${name}.jpg")
 
@@ -213,4 +212,4 @@ fun Route.carRoutes() {
 
 }
 
-const val BASE_URL = "http://127.0.0.1:8080/"
+const val BASE_URL = "http://192.168.178.51:8080/"

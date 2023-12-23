@@ -114,6 +114,7 @@ class UsersDAOFacadeImpl : UsersDAOFacade {
             Users.deleteWhere { id eq userId }
         }
     }
+
 }
 
 

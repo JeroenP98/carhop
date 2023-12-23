@@ -241,7 +241,17 @@ class CarsDAOFacadeImpl : CarsDAOFacade {
         return null
     }
 
+    override suspend fun getAllUserCars(userId: Int): List<Car>? {
+        val carList = dbQuery {
+            Cars.select { Cars.ownerId eq userId }.map(::resultRowToCar)
+        }
 
+        return if (carList.isNotEmpty()) {
+            carList
+        } else {
+            null
+        }
+    }
 }
 
 // initialize the car DAO

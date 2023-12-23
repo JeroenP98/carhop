@@ -12,4 +12,5 @@ interface UsersDAOFacade  {
     suspend fun getAllUsers(): List<User?>
     suspend fun updateUser(updatedUser: UpdateUserDTO, userId: Int): User?
     suspend fun deleteUser(userId: Int)
+
 }
