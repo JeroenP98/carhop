@@ -137,8 +137,10 @@ fun Route.carRoutes() {
                 val multipart = call.receiveMultipart()
                 multipart.forEachPart { part ->
                     if (part is PartData.FileItem) {
+                        val fileBytes = part.streamProvider().readBytes()
                         val name = "car_${requestedCarId}_image"
                         val originalFile = File("${imagesDir}/${name}.jpg")
+                        originalFile.writeBytes(fileBytes)
 
 
                         Thumbnails.of(originalFile)
