@@ -117,8 +117,28 @@ class CarsDAOFacadeImpl : CarsDAOFacade {
     }
 
     //return all cars
-    override suspend fun getAllCars(): List<Car> = dbQuery {
-        Cars.selectAll().map(::resultRowToCar)
+    override suspend fun getAllCars(): List<CarWithImageResponse> = dbQuery {
+        Cars.selectAll().map(::resultRowToCar).map { CarWithImageResponse(
+            it.id,
+            it.ownerId,
+            it.licensePlate,
+            it.rentalPrice,
+            it.available,
+            it.brandName,
+            it.modelName,
+            it.buildYear,
+            it.numOfSeats,
+            it.emissionCategory,
+            it.purchasePrice,
+            it.monthlyInsuranceCost,
+            it.yearlyMaintenanceCost,
+            it.range,
+            it.fuelType,
+            it.transmission,
+            it.latitude,
+            it.longitude,
+            "${BASE_URL}images/car_${it.id}_image.jpg"
+        ) }
     }
 
 
