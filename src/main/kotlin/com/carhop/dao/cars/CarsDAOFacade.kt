@@ -13,7 +13,7 @@ interface CarsDAOFacade {
 
     suspend fun registerCar(newCar: RegisterCarDTO): Car?
     suspend fun updateCar(updatedCar: UpdateCarDTO): Car?
-    suspend fun getAllCars(): List<Car>
+    suspend fun getAllCars(): List<CarWithImageResponse>
     suspend fun getCar(carId: Int): Car?
 
     suspend fun getCarWithImage(carId: Int): CarWithImageResponse?
