@@ -261,14 +261,32 @@ class CarsDAOFacadeImpl : CarsDAOFacade {
         return null
     }
 
-    override suspend fun getAllUserCars(userId: Int): List<Car>? {
+    override suspend fun getAllUserCars(userId: Int): List<CarWithImageResponse>? {
         val carList = dbQuery {
-            Cars.select { Cars.ownerId eq userId }.map(::resultRowToCar)
+            Cars.select { Cars.ownerId eq userId }.map(::resultRowToCar).map { CarWithImageResponse(
+                it.id,
+                it.ownerId,
+                it.licensePlate,
+                it.rentalPrice,
+                it.available,
+                it.brandName,
+                it.modelName,
+                it.buildYear,
+                it.numOfSeats,
+                it.emissionCategory,
+                it.purchasePrice,
+                it.monthlyInsuranceCost,
+                it.yearlyMaintenanceCost,
+                it.range,
+                it.fuelType,
+                it.transmission,
+                it.latitude,
+                it.longitude,
+                "${BASE_URL}images/car_${it.id}_image.jpg"
+            ) }
         }
 
-        return if (carList.isNotEmpty()) {
-            carList
-        } else {
+        return carList.ifEmpty {
             null
         }
     }

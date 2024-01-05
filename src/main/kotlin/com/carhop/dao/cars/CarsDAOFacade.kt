@@ -24,7 +24,7 @@ interface CarsDAOFacade {
     suspend fun getOwnerIdByCarId(requestedId: Int): Int?
     suspend fun getTotalCostOfOwnership(carId: Int): Double?
 
-    suspend fun getAllUserCars(userId: Int): List<Car>?
+    suspend fun getAllUserCars(userId: Int): List<CarWithImageResponse>?
 
 
 }

@@ -144,7 +144,7 @@ fun Route.carRoutes() {
 
 
                         Thumbnails.of(originalFile)
-                            .size(200, 200)
+                            .size(500, 500)
                             .toFile(originalFile)
 
                         call.respond(HttpStatusCode.OK, CarImageResponse("${BASE_URL}images/${name}.jpg"))
