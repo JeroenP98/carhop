@@ -21,4 +21,5 @@ interface RentalsDAOFacade {
     suspend fun getAllUserRentals(userId: Int): List<Rental>?
 
     suspend fun getAllUserRentedOutCars(userId: Int): List<Rental>?
+    suspend fun getAllRentalsByCarId(carId: Int): List<Rental>
 }

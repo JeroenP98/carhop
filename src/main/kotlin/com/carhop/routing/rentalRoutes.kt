@@ -117,5 +117,16 @@ fun Route.rentalRoutes() {
                 }
             }
         }
+        route("cars/rental/car/{carId}") {
+            get {
+                val requestedCarId = call.parameters["carId"]
+                if (requestedCarId != null) {
+                    val allRentalsByCarId = rentalDao.getAllRentalsByCarId(requestedCarId.toInt())
+                    call.respond(HttpStatusCode.OK, allRentalsByCarId)
+                } else {
+                    call.respond(HttpStatusCode.BadRequest, ResponseStatus("Invalid parameters"))
+                }
+            }
+        }
     }
 }

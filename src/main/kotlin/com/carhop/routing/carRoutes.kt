@@ -1,6 +1,7 @@
 package com.carhop.routing
 
 import com.carhop.dao.cars.carDAO
+import com.carhop.dao.rentals.rentalDao
 import com.carhop.dto.cars.CarImageResponse
 import com.carhop.dto.cars.RegisterCarDTO
 import com.carhop.dto.cars.UpdateCarDTO
@@ -113,8 +114,14 @@ fun Route.carRoutes() {
 
                     if (carBelongsTo == userId.toInt()) {
 
-                        carDAO.deleteCar(requestedId.toInt())
-                        call.respond(HttpStatusCode.OK, ResponseStatus("Car deleted"))
+                        val isCarBeingUsed = rentalDao.getAllRentalsByCarId(requestedId.toInt())
+                        if (isCarBeingUsed.isEmpty()) {
+                            carDAO.deleteCar(requestedId.toInt())
+                            call.respond(HttpStatusCode.OK, ResponseStatus("Car deleted"))
+                        } else {
+                            call.respond(HttpStatusCode.Forbidden, ResponseStatus("The car is being used in rentals and cannot be deleted"))
+                        }
+
                     } else {
                         call.respond(HttpStatusCode.Forbidden, ResponseStatus("Not allowed to delete any other car but your own"))
                     }

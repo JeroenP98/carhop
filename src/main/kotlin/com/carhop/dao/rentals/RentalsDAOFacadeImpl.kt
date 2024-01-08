@@ -156,6 +156,14 @@ class RentalsDAOFacadeImpl : RentalsDAOFacade {
             null
         }
     }
+
+    override suspend fun getAllRentalsByCarId(carId: Int): List<Rental> {
+        val rentalList = dbQuery {
+            Rentals.select { Rentals.carId eq carId }.map(::resultRowToRental)
+        }
+        return rentalList
+
+    }
 }
 
 //initialize the car DAO
