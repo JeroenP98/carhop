@@ -53,3 +53,4 @@ We're continuously working to enhance your CarHop experience. If you have any qu
     <td align="center"><a href="https://github.com/Janvanderwaal"><img src="https://avatars.githubusercontent.com/u/63095898?v=4" width="100px;" alt="Jan van der Waal"/><br /><sub><b>Jan van der Waal</b></sub></a><br /></td>
   </tr>
 </table>
+

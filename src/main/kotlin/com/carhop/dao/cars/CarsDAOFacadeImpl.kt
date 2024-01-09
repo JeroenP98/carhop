@@ -43,7 +43,7 @@ class CarsDAOFacadeImpl : CarsDAOFacade {
     }
 
 
-    override suspend fun registerCar(newCar: RegisterCarDTO): Car? = dbQuery {
+    override suspend fun registerCar(newCar: RegisterCarDTO): CarWithImageResponse? = dbQuery {
         //check if license plate exist and owner exists
         val isLicensePlateUnique = Cars.select(Cars.licensePlate eq newCar.licensePlate).empty()
         val userConsists = !Users.select(Users.id eq newCar.UserId).empty()
@@ -69,7 +69,30 @@ class CarsDAOFacadeImpl : CarsDAOFacade {
                 it[latitude] = newCar.latitude
             }
             //return the resulted value as a Car object
-            insertStatement.resultedValues?.singleOrNull()?.let(::resultRowToCar)
+            val car = insertStatement.resultedValues?.singleOrNull()?.let(::resultRowToCar)
+            if (car != null) CarWithImageResponse(
+                car.id,
+                car.ownerId,
+                car.licensePlate,
+                car.rentalPrice,
+                car.available,
+                car.brandName,
+                car.modelName,
+                car.buildYear,
+                car.numOfSeats,
+                car.emissionCategory,
+                car.purchasePrice,
+                car.monthlyInsuranceCost,
+                car.yearlyMaintenanceCost,
+                car.range,
+                car.fuelType,
+                car.transmission,
+                car.latitude,
+                car.longitude,
+                "${BASE_URL}images/car_${car.id}_image.jpg"
+            ) else {
+                null
+            }
         } else {
             null
         }

@@ -36,7 +36,7 @@ fun Route.carRoutes() {
                     val newCar = carDAO.registerCar(car)
 
                     if (newCar != null) {
-                        call.respond(HttpStatusCode.OK, mapOf("car" to newCar))
+                        call.respond(HttpStatusCode.OK, newCar)
                     } else  {
                         call.respond(HttpStatusCode.Forbidden, ResponseStatus("Unable to register car/ Licence plate already exists"))
                     }

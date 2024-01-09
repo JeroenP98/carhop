@@ -11,7 +11,7 @@ import com.carhop.models.User
 
 interface CarsDAOFacade {
 
-    suspend fun registerCar(newCar: RegisterCarDTO): Car?
+    suspend fun registerCar(newCar: RegisterCarDTO): CarWithImageResponse?
     suspend fun updateCar(updatedCar: UpdateCarDTO): Car?
     suspend fun getAllCars(): List<CarWithImageResponse>
     suspend fun getCar(carId: Int): Car?
