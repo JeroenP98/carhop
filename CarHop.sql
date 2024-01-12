@@ -124,126 +124,126 @@ values ('Nicoli', 'Stanlake', 'nstanlakee@pagesperso-orange.fr', 'aP4"CRY7wqt');
 insert into cars (owner_id, license_plate, rental_price, available, brand_name, model_name, build_year, num_of_seats,
                   emission_category, purchase_price, monthly_insurance_cost, yearly_maintenance_cost, range, fuel_type,
                   transmission, latitude, longitude)
-values (13, 'DC-69-LV', 76.38, true, 'Lexus', 'RX Hybrid', 2011, 6, 'd', 46075.54, 452.41, 396.44, 298, 'ELECTRIC',
+values (13, 'DC-69-LV', 79.99, true, 'Lexus', 'RX Hybrid', 2011, 6, 'd', 46075.54, 452.41, 396.44, 298, 'ELECTRIC',
         'Automatic', 51.583560, 4.796560);
 insert into cars (owner_id, license_plate, rental_price, available, brand_name, model_name, build_year, num_of_seats,
                   emission_category, purchase_price, monthly_insurance_cost, yearly_maintenance_cost, range, fuel_type,
                   transmission, latitude, longitude)
-values (12, 'VJ-53-IV', 49.47, false, 'Mazda', 'Miata MX-5', 1993, 3, 'd', 35362.45, 443.05, 67.81, 2, 'ELECTRIC',
-        'Automatic', 51.583560, 4.796560);
+values (12, 'VJ-53-IV', 65.99, false, 'Mazda', 'Miata MX-5', 1993, 3, 'd', 35362.45, 443.05, 67.81, 2, 'ELECTRIC',
+        'Automatic', 52.086899, 5.124256);
 insert into cars (owner_id, license_plate, rental_price, available, brand_name, model_name, build_year, num_of_seats,
                   emission_category, purchase_price, monthly_insurance_cost, yearly_maintenance_cost, range, fuel_type,
                   transmission, latitude, longitude)
-values (11, 'NE-40-GY', 7.59, true, 'Acura', 'Legend', 1994, 1, 'l', 57950.82, 188.43, 307.28, 217, 'ELECTRIC',
-        'Automatic', 51.583560, 4.796560);
+values (11, 'NE-40-GY', 79.95, true, 'Acura', 'Legend', 1994, 1, 'l', 57950.82, 188.43, 307.28, 217, 'ELECTRIC',
+        'Automatic', 52.013803, 4.722053);
 insert into cars (owner_id, license_plate, rental_price, available, brand_name, model_name, build_year, num_of_seats,
                   emission_category, purchase_price, monthly_insurance_cost, yearly_maintenance_cost, range, fuel_type,
                   transmission, latitude, longitude)
-values (9, 'DQ-08-GD', 80.55, true, 'Dodge', 'Neon', 2002, 2, 'x', 38630.59, 251.98, 279.78, 50, 'ELECTRIC',
-        'Automatic', 51.583560, 4.796560);
+values (9, 'DQ-08-GD', 110.00, true, 'Dodge', 'Neon', 2002, 2, 'x', 38630.59, 251.98, 279.78, 50, 'ELECTRIC',
+        'Automatic', 52.081651, 4.390175);
 insert into cars (owner_id, license_plate, rental_price, available, brand_name, model_name, build_year, num_of_seats,
                   emission_category, purchase_price, monthly_insurance_cost, yearly_maintenance_cost, range, fuel_type,
                   transmission, latitude, longitude)
-values (1, 'OX-32-QK', 14.39, false, 'Chrysler', 'Aspen', 2008, 3, 'c', 44685.97, 246.29, 369.98, 476, 'ELECTRIC',
-        'Automatic', 51.583560, 4.796560);
+values (1, 'OX-32-QK', 99.95, false, 'Chrysler', 'Aspen', 2008, 3, 'c', 44685.97, 246.29, 369.98, 476, 'ELECTRIC',
+        'Automatic', 52.009916, 4.232765);
 insert into cars (owner_id, license_plate, rental_price, available, brand_name, model_name, build_year, num_of_seats,
                   emission_category, purchase_price, monthly_insurance_cost, yearly_maintenance_cost, range, fuel_type,
                   transmission, latitude, longitude)
-values (9, 'VI-87-JG', 13.17, true, 'Chevrolet', 'Silverado 1500', 2011, 1, 'w', 29236.45, 81.98, 439.9, 383,
-        'ELECTRIC', 'Automatic', 51.583560, 4.796560);
+values (9, 'VI-87-JG', 120.99, true, 'Chevrolet', 'Silverado 1500', 2011, 1, 'w', 29236.45, 81.98, 439.9, 383,
+        'ELECTRIC', 'Automatic', 51.496240, 4.287392);
 insert into cars (owner_id, license_plate, rental_price, available, brand_name, model_name, build_year, num_of_seats,
                   emission_category, purchase_price, monthly_insurance_cost, yearly_maintenance_cost, range, fuel_type,
                   transmission, latitude, longitude)
-values (1, 'KE-79-NR', 36.91, false, 'Lotus', 'Exige', 2011, 5, 'z', 73942.83, 434.61, 437.25, 168, 'ELECTRIC',
-        'Automatic', 51.583560, 4.796560);
+values (1, 'KE-79-NR', 89.99, false, 'Lotus', 'Exige', 2011, 5, 'z', 73942.83, 434.61, 437.25, 168, 'ELECTRIC',
+        'Automatic', 51.250302, 4.452185);
 insert into cars (owner_id, license_plate, rental_price, available, brand_name, model_name, build_year, num_of_seats,
                   emission_category, purchase_price, monthly_insurance_cost, yearly_maintenance_cost, range, fuel_type,
                   transmission, latitude, longitude)
-values (2, 'VR-28-GW', 24.53, false, 'BMW', '3 Series', 2011, 5, 'j', 31053.93, 425.95, 214.85, 271, 'ELECTRIC',
-        'Automatic', 51.583560, 4.796560);
+values (2, 'VR-28-GW', 86.99, false, 'BMW', '3 Series', 2011, 5, 'j', 31053.93, 425.95, 214.85, 271, 'ELECTRIC',
+        'Automatic', 51.550913, 5.080010);
 insert into cars (owner_id, license_plate, rental_price, available, brand_name, model_name, build_year, num_of_seats,
                   emission_category, purchase_price, monthly_insurance_cost, yearly_maintenance_cost, range, fuel_type,
                   transmission, latitude, longitude)
-values (3, 'NC-32-OI', 77.08, false, 'Hyundai', 'Sonata', 2010, 4, 'v', 63204.08, 332.03, 400.16, 227, 'ELECTRIC',
-        'Automatic', 51.583560, 4.796560);
+values (3, 'NC-32-OI', 77.00, false, 'Hyundai', 'Sonata', 2010, 4, 'v', 63204.08, 332.03, 400.16, 227, 'ELECTRIC',
+        'Automatic', 51.658303, 5.030036);
 insert into cars (owner_id, license_plate, rental_price, available, brand_name, model_name, build_year, num_of_seats,
                   emission_category, purchase_price, monthly_insurance_cost, yearly_maintenance_cost, range, fuel_type,
                   transmission, latitude, longitude)
-values (7, 'MI-92-XJ', 79.34, true, 'Oldsmobile', '98', 1994, 5, 'u', 69295.71, 333.5, 206.9, 266, 'HYBRID',
-        'Automatic', 51.583560, 4.796560);
+values (7, 'MI-92-XJ', 79.99, true, 'Oldsmobile', '98', 1994, 5, 'u', 69295.71, 333.5, 206.9, 266, 'HYBRID',
+        'Automatic', 51.809901, 4.708708);
 insert into cars (owner_id, license_plate, rental_price, available, brand_name, model_name, build_year, num_of_seats,
                   emission_category, purchase_price, monthly_insurance_cost, yearly_maintenance_cost, range, fuel_type,
                   transmission, latitude, longitude)
-values (5, 'EI-97-JR', 97.96, true, 'Lamborghini', 'Diablo', 1993, 4, 'r', 30333.35, 147.55, 243.94, 366, 'HYBRID',
-        'Automatic', 51.583560, 4.796560);
+values (5, 'EI-97-JR', 199.95, true, 'Lamborghini', 'Diablo', 1993, 4, 'r', 30333.35, 147.55, 243.94, 366, 'HYBRID',
+        'Automatic', 51.865004, 4.605746);
 insert into cars (owner_id, license_plate, rental_price, available, brand_name, model_name, build_year, num_of_seats,
                   emission_category, purchase_price, monthly_insurance_cost, yearly_maintenance_cost, range, fuel_type,
                   transmission, latitude, longitude)
-values (3, 'XJ-07-UT', 10.82, true, 'Mazda', 'B2000', 1985, 3, 'y', 10621.73, 372.48, 359.42, 417, 'HYBRID',
-        'Automatic', 51.583560, 4.796560);
+values (3, 'XJ-07-UT', 55.00, true, 'Mazda', 'B2000', 1985, 3, 'y', 10621.73, 372.48, 359.42, 417, 'HYBRID',
+        'Automatic', 51.865004, 4.605746);
 insert into cars (owner_id, license_plate, rental_price, available, brand_name, model_name, build_year, num_of_seats,
                   emission_category, purchase_price, monthly_insurance_cost, yearly_maintenance_cost, range, fuel_type,
                   transmission, latitude, longitude)
-values (1, 'EF-75-RS', 6.0, true, 'Ferrari', 'California', 2010, 2, 'i', 50210.4, 140.83, 54.58, 451, 'HYBRID',
-        'Automatic', 51.583560, 4.796560);
+values (1, 'EF-75-RS', 185.99, true, 'Ferrari', 'California', 2010, 2, 'i', 50210.4, 140.83, 54.58, 451, 'HYBRID',
+        'Automatic', 51.865004, 4.605746);
 insert into cars (owner_id, license_plate, rental_price, available, brand_name, model_name, build_year, num_of_seats,
                   emission_category, purchase_price, monthly_insurance_cost, yearly_maintenance_cost, range, fuel_type,
                   transmission, latitude, longitude)
-values (5, 'BB-83-UY', 16.92, false, 'Rolls-Royce', 'Phantom', 2010, 5, 'p', 52485.08, 296.45, 323.01, 330, 'HYBRID',
-        'Automatic', 51.583560, 4.796560);
+values (5, 'BB-83-UY', 210.00, false, 'Rolls-Royce', 'Phantom', 2010, 5, 'p', 52485.08, 296.45, 323.01, 330, 'HYBRID',
+        'Automatic', 52.351766, 4.859894);
 insert into cars (owner_id, license_plate, rental_price, available, brand_name, model_name, build_year, num_of_seats,
                   emission_category, purchase_price, monthly_insurance_cost, yearly_maintenance_cost, range, fuel_type,
                   transmission, latitude, longitude)
-values (9, 'WH-94-XB', 25.69, false, 'Land Rover', 'Discovery', 2004, 2, 'z', 33397.48, 243.02, 368.29, 79, 'HYBRID',
-        'Automatic', 51.583560, 4.796560);
+values (9, 'WH-94-XB', 105.99, false, 'Land Rover', 'Discovery', 2004, 2, 'z', 33397.48, 243.02, 368.29, 79, 'HYBRID',
+        'Automatic', 52.496082, 4.968524);
 insert into cars (owner_id, license_plate, rental_price, available, brand_name, model_name, build_year, num_of_seats,
                   emission_category, purchase_price, monthly_insurance_cost, yearly_maintenance_cost, range, fuel_type,
                   transmission, latitude, longitude)
-values (6, 'XJ-79-OM', 87.4, true, 'BMW', 'X6', 2011, 3, 'o', 54459.52, 476.63, 437.43, 157, 'HYBRID', 'Automatic', 51.583560, 4.796560);
+values (6, 'XJ-79-OM', 125.00, true, 'BMW', 'X6', 2011, 3, 'o', 54459.52, 476.63, 437.43, 157, 'HYBRID', 'Automatic', 52.369939, 5.253143);
 insert into cars (owner_id, license_plate, rental_price, available, brand_name, model_name, build_year, num_of_seats,
                   emission_category, purchase_price, monthly_insurance_cost, yearly_maintenance_cost, range, fuel_type,
                   transmission, latitude, longitude)
 values (10, 'AH-56-EN', 74.56, false, 'Mazda', 'Protege', 1994, 6, 'j', 17137.14, 354.88, 197.62, 348, 'HYBRID',
-        'Automatic', 51.583560, 4.796560);
+        'Automatic', 52.295267, 5.162752);
 insert into cars (owner_id, license_plate, rental_price, available, brand_name, model_name, build_year, num_of_seats,
                   emission_category, purchase_price, monthly_insurance_cost, yearly_maintenance_cost, range, fuel_type,
                   transmission, latitude, longitude)
-values (3, 'NL-99-TI', 17.09, false, 'Toyota', 'Corolla', 1993, 2, 'a', 62155.26, 497.53, 161.56, 120, 'HYBRID',
-        'Automatic', 51.583560, 4.796560);
+values (3, 'NL-99-TI', 49.99, false, 'Toyota', 'Corolla', 1993, 2, 'a', 62155.26, 497.53, 161.56, 120, 'HYBRID',
+        'Automatic', 52.266791, 4.627374);
 insert into cars (owner_id, license_plate, rental_price, available, brand_name, model_name, build_year, num_of_seats,
                   emission_category, purchase_price, monthly_insurance_cost, yearly_maintenance_cost, range, fuel_type,
                   transmission, latitude, longitude)
-values (9, 'FA-56-TF', 16.97, false, 'Volvo', 'C70', 2011, 6, 'o', 17737.53, 235.64, 481.71, 15, 'HYBRID', 'Automatic', 51.583560, 4.796560);
+values (9, 'FA-56-TF', 77.99, false, 'Volvo', 'C70', 2011, 6, 'o', 17737.53, 235.64, 481.71, 15, 'HYBRID', 'Automatic', 52.197655, 4.408864);
 insert into cars (owner_id, license_plate, rental_price, available, brand_name, model_name, build_year, num_of_seats,
                   emission_category, purchase_price, monthly_insurance_cost, yearly_maintenance_cost, range, fuel_type,
                   transmission, latitude, longitude)
-values (9, 'CR-46-JV', 99.41, false, 'Lamborghini', 'Gallardo', 2012, 1, 'w', 17069.62, 172.58, 276.72, 81, 'HYBRID',
-        'Automatic', 51.583560, 4.796560);
+values (9, 'CR-46-JV', 99.99, false, 'Lamborghini', 'Gallardo', 2012, 1, 'w', 17069.62, 172.58, 276.72, 81, 'HYBRID',
+        'Automatic', 52.143101, 4.398355);
 insert into cars (owner_id, license_plate, rental_price, available, brand_name, model_name, build_year, num_of_seats,
                   emission_category, purchase_price, monthly_insurance_cost, yearly_maintenance_cost, range, fuel_type,
                   transmission, latitude, longitude)
-values (15, 'ZH-77-IM', 64.7, false, 'Mitsubishi', 'Eclipse', 2010, 4, 'e', 47356.88, 371.6, 143.94, 442, 'GASOLINE',
-        'Manual', 51.583560, 4.796560);
+values (15, 'ZH-77-IM', 64.75, false, 'Mitsubishi', 'Eclipse', 2010, 4, 'e', 47356.88, 371.6, 143.94, 442, 'GASOLINE',
+        'Manual', 52.082618, 4.290770);
 insert into cars (owner_id, license_plate, rental_price, available, brand_name, model_name, build_year, num_of_seats,
                   emission_category, purchase_price, monthly_insurance_cost, yearly_maintenance_cost, range, fuel_type,
                   transmission, latitude, longitude)
-values (6, 'SW-14-XZ', 84.84, false, 'Ford', 'Festiva', 1993, 3, 'c', 62717.9, 287.36, 118.1, 133, 'GASOLINE',
-        'Manual', 51.583560, 4.796560);
+values (6, 'SW-14-XZ', 84.99, false, 'Ford', 'Festiva', 1993, 3, 'c', 62717.9, 287.36, 118.1, 133, 'GASOLINE',
+        'Manual', 51.997360, 4.203145);
 insert into cars (owner_id, license_plate, rental_price, available, brand_name, model_name, build_year, num_of_seats,
                   emission_category, purchase_price, monthly_insurance_cost, yearly_maintenance_cost, range, fuel_type,
                   transmission, latitude, longitude)
-values (13, 'QC-08-MT', 13.2, true, 'Suzuki', 'Cultus', 1985, 4, 'o', 58242.18, 289.97, 191.83, 450, 'GASOLINE',
-        'Manual', 51.583560, 4.796560);
+values (13, 'QC-08-MT', 75.99, true, 'Suzuki', 'Cultus', 1985, 4, 'o', 58242.18, 289.97, 191.83, 450, 'GASOLINE',
+        'Manual', 51.832881, 4.135776);
 insert into cars (owner_id, license_plate, rental_price, available, brand_name, model_name, build_year, num_of_seats,
                   emission_category, purchase_price, monthly_insurance_cost, yearly_maintenance_cost, range, fuel_type,
                   transmission, latitude, longitude)
-values (11, 'LM-45-GO', 53.41, false, 'GMC', 'Yukon', 1994, 3, 'l', 43922.04, 194.12, 424.46, 138, 'GASOLINE',
-        'Manual', 51.583560, 4.796560);
+values (11, 'LM-45-GO', 135.99, false, 'GMC', 'Yukon', 1994, 3, 'l', 43922.04, 194.12, 424.46, 138, 'GASOLINE',
+        'Manual', 51.756348, 4.160996);
 insert into cars (owner_id, license_plate, rental_price, available, brand_name, model_name, build_year, num_of_seats,
                   emission_category, purchase_price, monthly_insurance_cost, yearly_maintenance_cost, range, fuel_type,
                   transmission, latitude, longitude)
-values (7, 'MQ-64-TT', 78.58, false, 'Honda', 'Element', 2011, 2, 'h', 54080.76, 480.19, 427.62, 294, 'GASOLINE',
-        'Automatic', 51.583560, 4.796560);
+values (7, 'MQ-64-TT', 79.99, false, 'Honda', 'Element', 2011, 2, 'h', 54080.76, 480.19, 427.62, 294, 'GASOLINE',
+        'Automatic', 51.605298, 3.897421);
 
 
 INSERT INTO Rentals (car_id, renter_id, start_date, end_date, cost)
